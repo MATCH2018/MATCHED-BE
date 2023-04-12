@@ -1,5 +1,6 @@
 package com.linked.matched.entity;
 
+import com.linked.matched.entity.status.RoleStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,11 +27,14 @@ public class User {
     private String sex;
     private Date createDate;
 
+    @Enumerated(EnumType.STRING)
+    private RoleStatus roleStatus;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, Date createDate) {
+    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, Date createDate, RoleStatus roleStatus) {
         this.userId = userId;
         this.loginId = loginId;
         this.password = password;
@@ -40,5 +44,6 @@ public class User {
         this.birth = birth;
         this.sex = sex;
         this.createDate = createDate;
+        this.roleStatus = roleStatus;
     }
 }
