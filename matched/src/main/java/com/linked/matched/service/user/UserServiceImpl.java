@@ -4,7 +4,7 @@ import com.linked.matched.config.jwt.TokenProvider;
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
-import com.linked.matched.request.jwt.TokenDto;
+import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import lombok.RequiredArgsConstructor;

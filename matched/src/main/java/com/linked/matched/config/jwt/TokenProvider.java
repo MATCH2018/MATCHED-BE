@@ -1,11 +1,8 @@
 package com.linked.matched.config.jwt;
 
-import com.linked.matched.request.jwt.TokenDto;
+import com.linked.matched.response.jwt.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

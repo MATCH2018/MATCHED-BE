@@ -1,4 +1,4 @@
-package com.linked.matched.request.jwt;
+package com.linked.matched.response.jwt;
 
 import lombok.Builder;
 import lombok.Getter;

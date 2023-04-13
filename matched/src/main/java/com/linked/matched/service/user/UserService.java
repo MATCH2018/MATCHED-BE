@@ -1,6 +1,6 @@
 package com.linked.matched.service.user;
 
-import com.linked.matched.request.jwt.TokenDto;
+import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 
