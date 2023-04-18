@@ -33,6 +33,9 @@ dependencies {
 	implementation "com.querydsl:querydsl-core"
 	implementation "com.querydsl:querydsl-jpa"
 
+	//mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	compileOnly 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
