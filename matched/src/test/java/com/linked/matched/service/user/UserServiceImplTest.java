@@ -4,6 +4,9 @@ import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
+import com.linked.matched.request.jwt.DeleteTokenDto;
+import com.linked.matched.request.user.PwdEdit;
+import com.linked.matched.request.user.UserEdit;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
@@ -208,5 +211,157 @@ class UserServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("refreshToken 삭제")
+    void test7(){
+        UserJoin userJoin= UserJoin.builder()
+                .loginId("아이디입니다")
+                .password("1234")
+                .checkPassword("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+//               .roleStatus(RoleStatus.ROLE_USER)
+                .sex("남성")
+                .build();
 
+        try {
+            userService.join(userJoin);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        UserLogin login = UserLogin.builder()
+                .loginId("아이디입니다")
+                .password("1234")
+                .build();
+
+        TokenDto user = userService.login(login);
+
+        RefreshToken next = refreshTokenRepository.findAll().iterator().next();
+
+        Assertions.assertEquals(next.getValue(),user.getRefreshToken());
+
+        DeleteTokenDto deleteToken = DeleteTokenDto.builder()
+                .refreshToken(next.getValue())
+                .build();
+
+        userService.refreshTokenDelete(deleteToken);
+
+        Assertions.assertEquals(refreshTokenRepository.count(),0);
+    }
+
+    @Test
+    @DisplayName("회원 정보 수정")
+    void test8(){
+        UserJoin userJoin= UserJoin.builder()
+                .loginId("아이디입니다")
+                .password("1234")
+                .checkPassword("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+//               .roleStatus(RoleStatus.ROLE_USER)
+                .sex("남성")
+                .build();
+
+        try {
+            userService.join(userJoin);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Assertions.assertEquals(userRepository.findAll().size(), 1);
+
+        User user = userRepository.findAll().iterator().next();
+
+        UserEdit userEdit = UserEdit.builder()
+                .name("최씨")
+                .department("컴퓨터공학과")
+                .gradle(2)
+                .build();
+
+        userService.edit(user.getUserId(),userEdit);
+
+        User edit = userRepository.findAll().iterator().next();
+        Assertions.assertEquals(userRepository.findAll().size(), 1);
+
+        Assertions.assertEquals(edit.getName(),"최씨");
+        Assertions.assertEquals(edit.getDepartment(),"컴퓨터공학과");
+        //여기서 null이 뜬다. null이 안뜨도록 수정해줘야한다.
+        Assertions.assertEquals(edit.getLoginId(),"아이디입니다");
+    }
+
+    @Test
+    @DisplayName("회원 삭제")
+    void test9(){
+        UserJoin userJoin= UserJoin.builder()
+                .loginId("아이디입니다")
+                .password("1234")
+                .checkPassword("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+//               .roleStatus(RoleStatus.ROLE_USER)
+                .sex("남성")
+                .build();
+
+        try {
+            userService.join(userJoin);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        User next = userRepository.findAll().iterator().next();
+
+        userService.deleteUser(next.getUserId());
+
+        Assertions.assertEquals(userRepository.count(),0);
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경")
+    void test10(){
+
+        UserJoin userJoin= UserJoin.builder()
+                .loginId("아이디입니다")
+                .password("1234")
+                .checkPassword("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+//               .roleStatus(RoleStatus.ROLE_USER)
+                .sex("남성")
+                .build();
+
+        try {
+            userService.join(userJoin);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        User next = userRepository.findAll().iterator().next();
+
+        PwdEdit newPassword = PwdEdit.builder()
+                .nowPassword("1234")
+                .newPassword("5678")
+                .checkPassword("5678")
+                .build();
+
+        userService.passwordEdit(next.getUserId(), newPassword);
+
+        UserLogin login = UserLogin.builder()
+                .loginId("아이디입니다")
+                .password("5678")
+                .build();
+
+        TokenDto user = userService.login(login);
+
+        Assertions.assertNotNull(user);
+    }
 }

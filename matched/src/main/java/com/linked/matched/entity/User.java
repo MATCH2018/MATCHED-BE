@@ -1,6 +1,8 @@
 package com.linked.matched.entity;
 
 import com.linked.matched.entity.status.RoleStatus;
+import com.linked.matched.request.user.PwdEdit;
+import com.linked.matched.request.user.UserEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,5 +47,17 @@ public class User {
         this.sex = sex;
         this.createDate = createDate;
         this.roleStatus = roleStatus;
+    }
+
+    public void edit(UserEdit userEdit) {
+        this.name=userEdit.getName();
+        this.department=userEdit.getDepartment();
+        this.gradle=userEdit.getGradle();
+        this.birth=userEdit.getBirth();
+        this.sex=userEdit.getSex();
+    }
+
+    public void passwordEdit(String pwdEdit) {
+        this.password=pwdEdit;
     }
 }

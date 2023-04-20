@@ -6,16 +6,16 @@ import lombok.Getter;
 import java.util.Date;
 
 @Getter
-public class Edit {
+public class UserEdit {
 
     private String name;
     private String department;
-    private String gradle;
+    private Integer gradle;
     private Date birth;
     private String sex;
 
     @Builder
-    public Edit(String name, String department, String gradle, Date birth, String sex) {
+    public UserEdit(String name, String department, Integer gradle, Date birth, String sex) {
         this.name = name;
         this.department = department;
         this.gradle = gradle;
