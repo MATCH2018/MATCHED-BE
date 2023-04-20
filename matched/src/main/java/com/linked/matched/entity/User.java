@@ -57,7 +57,7 @@ public class User {
         this.sex=userEdit.getSex();
     }
 
-    public void passwordEdit(PwdEdit pwdEdit) {
-        this.password=pwdEdit.getNewPassword();
+    public void passwordEdit(String pwdEdit) {
+        this.password=pwdEdit;
     }
 }

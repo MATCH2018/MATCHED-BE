@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void edit(Long userId, UserEdit userEdit) {
         User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException());
-
+        //build를 다시해야한다. 어노테이션이 아니라 내가 build를 열어서 수정해야한다.
         user.edit(userEdit);
     }
 
@@ -134,7 +134,9 @@ public class UserServiceImpl implements UserService{
         if (!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             return;
         }
-        user.passwordEdit(pwdEdit);
+        //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
+        String encode = passwordEncoder.encode(pwdEdit.getNewPassword());
+        user.passwordEdit(encode);
     }
 
 
