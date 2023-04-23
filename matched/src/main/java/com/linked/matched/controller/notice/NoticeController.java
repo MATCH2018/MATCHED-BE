@@ -5,12 +5,11 @@ import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
 import com.linked.matched.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class NoticeController {
 
