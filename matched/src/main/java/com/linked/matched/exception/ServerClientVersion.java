@@ -10,6 +10,6 @@ public class ServerClientVersion extends MatchException{
 
     @Override
     public int getStatusCode() {
-        return 401;
+        return 415;
     }
 }
