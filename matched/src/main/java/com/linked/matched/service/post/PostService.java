@@ -2,6 +2,7 @@ package com.linked.matched.service.post;
 
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.status.BoardStatus;
+import com.linked.matched.exception.PostNotFound;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
@@ -32,7 +33,7 @@ public class PostService {
     public PostResponse findPost(Long postId) {
         //목록중 내가 원하는 정보찾기
         //return 값 줘야한다. - querydsl 사용해야한다. 바뀔수 있다. 분류를 먼저하고 다시 찾을 수 있다.
-        return postRepository.findById(postId).map(PostResponse::new).orElseThrow(IllegalArgumentException::new);
+        return postRepository.findById(postId).map(PostResponse::new).orElseThrow(PostNotFound::new);
     }
 
     public void write(PostCreate postCreate) {
@@ -50,7 +51,7 @@ public class PostService {
     public void edit(Long postId, PostEdit postEdit) {
         //게시글 정정
         //리턴 값 필요 없음?-그냥 기본으로 할까? 흠.....
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException());
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         post.edit(postEdit);
     }
@@ -59,12 +60,7 @@ public class PostService {
         //삭제
         //리턴 값 필요 없음
         //예외처리 해줘야한다.
-        Post post = null;
-        try {
-            post = postRepository.findById(postId).orElseThrow(() -> new IllegalAccessException());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         postRepository.delete(post);
     }

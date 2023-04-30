@@ -47,7 +47,7 @@ public class UserController {
         return confirm;
     }
 
-    @PostMapping("/{userId}/password_find")
+    @PostMapping("/{userId}/password_change")
     public void userPasswordFind(@PathVariable Long userId,@RequestBody PwdEdit pwdEdit) {//(password/edit) -0
         userService.passwordEdit(userId,pwdEdit);
     }

@@ -1,5 +1,6 @@
 package com.linked.matched.config.jwt;
 
+import com.linked.matched.exception.AuthenticationFail;
 import com.linked.matched.response.jwt.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class TokenProvider {
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
-    private Key key;
+    private final Key key;
 
     public TokenProvider(@Value("${jwt.secret}") String secret) {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
@@ -75,7 +76,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new AuthenticationFail();
         }
 
         // 클레임에서 권한 정보 가져오기
