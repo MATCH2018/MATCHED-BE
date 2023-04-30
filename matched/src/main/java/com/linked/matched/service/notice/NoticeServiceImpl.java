@@ -1,6 +1,7 @@
 package com.linked.matched.service.notice;
 
 import com.linked.matched.entity.Notice;
+import com.linked.matched.exception.PostNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
@@ -29,7 +30,7 @@ public class NoticeServiceImpl implements NoticeService{
     public NoticeResponse findNotice(Long noticeId) {
         return noticeRepository.findById(noticeId)
                 .map(NoticeResponse::new)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(PostNotFound::new);
     }
 
     @Override
@@ -46,14 +47,17 @@ public class NoticeServiceImpl implements NoticeService{
     @Transactional
     public void editNotice(Long noticeId, NoticeEdit noticeEdit){
 
-        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new IllegalArgumentException());
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(PostNotFound::new);
 
         notice.edit(noticeEdit);
     }
 
     @Override
     public void deleteNotice(Long noticeId) {
-        noticeRepository.deleteById(noticeId);
+
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(PostNotFound::new);
+
+        noticeRepository.delete(notice);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.linked.matched.service.user;
 
+import com.linked.matched.exception.EmailSendFail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -75,9 +76,14 @@ public class EmailServiceImpl implements EmailService{
         return key.toString();
     }
     @Override
-    public String sendSimpleMessage(String to)throws Exception {
+    public String sendSimpleMessage(String to) {
         // TODO Auto-generated method stub
-        MimeMessage message = createMessage(to);
+        MimeMessage message = null;
+        try {
+            message = createMessage(to);
+        } catch (Exception e) {
+            throw new EmailSendFail();
+        }
         try{//예외처리
             emailSender.send(message);
         }catch(MailException es){

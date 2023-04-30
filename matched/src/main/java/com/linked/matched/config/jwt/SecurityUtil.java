@@ -1,5 +1,6 @@
 package com.linked.matched.config.jwt;
 
+import com.linked.matched.exception.NotSecurityContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -13,7 +14,7 @@ public class SecurityUtil {
         final Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Security Context 에 인즈 정보가 없습니다.");
+            throw new NotSecurityContext();
         }
 
         return Long.parseLong(authentication.getName());
