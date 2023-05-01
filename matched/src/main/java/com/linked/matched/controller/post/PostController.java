@@ -2,6 +2,7 @@ package com.linked.matched.controller.post;
 
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class PostController {
 
 
     @GetMapping("/board/{boardName}")
-    public List<PostResponse> viewList(@PathVariable String boardName){
-        return postService.getList(boardName);
+    public List<PostResponse> viewList(@PathVariable String boardName,@RequestBody PostSearch postSearch){
+        return postService.getList(boardName,postSearch);
     }
 
     @PostMapping("/board/{boardName}")
@@ -44,5 +45,4 @@ public class PostController {
     
     //카테고리 넣는 검색
 
-    //페이징
 }
