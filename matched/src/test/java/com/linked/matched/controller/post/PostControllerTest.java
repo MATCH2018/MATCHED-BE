@@ -6,20 +6,17 @@ import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
-import com.linked.matched.service.post.PostService;
+import com.linked.matched.request.post.PostSearch;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -74,12 +71,18 @@ class PostControllerTest {
 
         postRepository.save(request3);
 
+        PostSearch page = PostSearch.builder()
+                .page(1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/board/{boardName}", "club")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("제목입니다1."))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("제목입니다3."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("제목입니다3."))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("제목입니다1."))
                 .andDo(MockMvcResultHandlers.print());
     }
 

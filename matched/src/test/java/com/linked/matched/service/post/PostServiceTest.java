@@ -5,6 +5,7 @@ import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -203,14 +204,18 @@ class PostServiceTest {
 
         postRepository.save(club2);
 
+        PostSearch page = PostSearch.builder()
+                .page(1)
+                .build();
+
         //when
-        List<PostResponse> clubList = postService.getList("club");
+        List<PostResponse> clubList = postService.getList("club",page);
 
         Assertions.assertEquals(clubList.size(),2);
-        Assertions.assertEquals(clubList.get(0).getTitle(),"제목임다.");
-        Assertions.assertEquals(clubList.get(0).getPostId(),1L);
-        Assertions.assertEquals(clubList.get(1).getTitle(),"제목임다2.");
-        Assertions.assertEquals(clubList.get(1).getPostId(),3L);
+        Assertions.assertEquals(clubList.get(0).getTitle(),"제목임다2.");
+        Assertions.assertEquals(clubList.get(0).getPostId(),3L);
+        Assertions.assertEquals(clubList.get(1).getTitle(),"제목임다.");
+        Assertions.assertEquals(clubList.get(1).getPostId(),1L);
     }
 
 
