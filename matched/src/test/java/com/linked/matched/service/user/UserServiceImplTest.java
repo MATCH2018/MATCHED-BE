@@ -38,6 +38,7 @@ class UserServiceImplTest {
     @BeforeEach
     void clean(){
         userRepository.deleteAll();
+        refreshTokenRepository.deleteAll();
     }
     
     @Test

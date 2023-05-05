@@ -6,6 +6,7 @@ import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.service.user.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,10 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @AfterEach
+    void clean() {
+        userRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("회원 가입")

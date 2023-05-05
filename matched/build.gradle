@@ -23,7 +23,6 @@ repositories {
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
 	snippetsDir = file('build/generated-snippets')
 }
 
@@ -33,8 +32,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 
-	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.7.RELEASE'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.7.RELEASE'
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
 	//Querydsl
 	implementation "com.querydsl:querydsl-core"
@@ -68,23 +67,22 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
 }
 test {
 	outputs.dir snippetsDir
 }
 asciidoctor {
-	inputs.dir snippetsDir
-	configurations 'asciidoctorExt'
 	dependsOn test
+	inputs.dir snippetsDir
 }
 
-bootJar {
-	dependsOn asciidoctor
-	copy{
-		from asciidoctor.outputDir
-		into "src/main/resources/static/docs"
-	}
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
 }
+
