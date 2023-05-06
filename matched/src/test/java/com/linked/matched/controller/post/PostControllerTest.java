@@ -105,9 +105,11 @@ class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
+        Post next = postRepository.findAll().iterator().next();
+
         //then
         Assertions.assertEquals(1L, postRepository.count());
-        Assertions.assertEquals(postRepository.findById(1L).get().getTitle(), "제목입니다.");
+        Assertions.assertEquals(next.getTitle(), "제목입니다.");
     }
 
     @Test

@@ -18,10 +18,10 @@ public class PostEdit {
     private String categoryName;
 
     @Builder
-    public PostEdit(String title, String content, LocalDateTime updateAt, Integer limitPeople, BoardStatus boardName, String categoryName) {
+    public PostEdit(String title, String content, Integer limitPeople, BoardStatus boardName, String categoryName) {
         this.title = title;
         this.content = content;
-        this.updateAt = updateAt;
+        this.updateAt = LocalDateTime.now();
         this.limitPeople = limitPeople;
         this.boardName = boardName;
         this.categoryName = categoryName;

@@ -53,8 +53,10 @@ class NoticeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
+        Notice next = noticeRepository.findAll().iterator().next();
+
         Assertions.assertEquals(noticeRepository.count(),1L);
-        Assertions.assertEquals(noticeRepository.findById(1L).get().getTitle(),"제목입니다.");
+        Assertions.assertEquals(next.getTitle(),"제목입니다.");
     }
 
     @Test
@@ -78,7 +80,9 @@ class NoticeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        Assertions.assertEquals(noticeRepository.findById(1L).get().getTitle(), "제목");
+        Notice next = noticeRepository.findAll().iterator().next();
+
+        Assertions.assertEquals(next.getTitle(), "제목");
 
     }
     
