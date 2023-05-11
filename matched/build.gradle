@@ -35,6 +35,10 @@ dependencies {
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
+	//웹소켓
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+
 	//Querydsl
 	implementation "com.querydsl:querydsl-core"
 	implementation "com.querydsl:querydsl-jpa"

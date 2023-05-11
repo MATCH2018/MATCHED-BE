@@ -152,9 +152,9 @@ public class PostControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("title").type(JsonFieldType.STRING).description("제목입니다."),
                                 PayloadDocumentation.fieldWithPath("content").type(JsonFieldType.STRING).description("내용입니다."),
                                 PayloadDocumentation.fieldWithPath("updateAt").type(JsonFieldType.STRING).description("업데이트 시간입니다."),
-                                PayloadDocumentation.fieldWithPath("limitPeople").type(JsonFieldType.STRING).description("인원 수 입니다."),
+                                PayloadDocumentation.fieldWithPath("limitPeople").type(JsonFieldType.NUMBER).description("인원 수 입니다."),
                                 PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring"),
-                                PayloadDocumentation.fieldWithPath("categoryName").type(JsonFieldType.STRING).description("카테고리 종류")
+                                PayloadDocumentation.fieldWithPath("categoryName").description("카테고리 종류")
                         ))
                 );
     }
