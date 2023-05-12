@@ -23,7 +23,7 @@ repositories {
 }
 
 ext {
-	snippetsDir = file('build/generated-snippets')
+	snippetsDir = file('$build/generated-snippets')
 }
 
 dependencies {
@@ -34,6 +34,10 @@ dependencies {
 
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	//웹소켓
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
 
 	//Querydsl
 	implementation "com.querydsl:querydsl-core"
@@ -66,7 +70,6 @@ tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
 }
-
 
 
 task copyDocument(type: Copy) {

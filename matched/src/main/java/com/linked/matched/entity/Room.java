@@ -17,13 +17,16 @@ public class Room {
     @Id
     @GeneratedValue
     private Long roomId;
-    private Date createdAt;
-    private Integer personnel;
+    private String name;
+    private Long headUserId;
+    private Long tailUserId;
+
 
     @Builder
-    public Room(Long roomId, Date createdAt, Integer personnel) {
+    public Room(Long roomId, String name, Long headUserId, Long tailUserId) {
         this.roomId = roomId;
-        this.createdAt = createdAt;
-        this.personnel = personnel;
+        this.name = name;
+        this.headUserId = headUserId;
+        this.tailUserId = tailUserId;
     }
 }
