@@ -8,7 +8,8 @@ import lombok.Setter;
 @Setter
 public class ChatMessage {
 
-    private String roomId;
+    private Long roomId;
+    private Long userId;
     private String writer;
     private String message;
 
