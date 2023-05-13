@@ -15,6 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,10 +40,37 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("http://39.120.169.42:3000");//권한하는거 한번 봐야한다.
+        // 허용 출처 설정해주기(front)
+//        configuration.addAllowedOrigin("*"); // local 테스트 시
+        // 요청 시 오는 HTTP Method허용(*은 모두 허용)
+        configuration.addAllowedMethod("*");
+        // 헤더 허용(*은 모두 허용)
+        configuration.addAllowedHeader("*");
+
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+//        configuration.addExposedHeader("Authorization");
+//        configuration.addExposedHeader("Refresh-Token");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf().disable()
 
+                .cors()
+                .configurationSource(corsConfigurationSource())
+
+                .and()
                 .headers().frameOptions().sameOrigin()
 
                 //401,403 Exception 핸들링
