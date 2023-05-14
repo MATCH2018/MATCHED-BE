@@ -43,16 +43,13 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("http://39.120.169.42:3000");//권한하는거 한번 봐야한다.
-        // 허용 출처 설정해주기(front)
-//        configuration.addAllowedOrigin("*"); // local 테스트 시
+        configuration.addAllowedOriginPattern("*");//권한하는거 한번 봐야한다.
         // 요청 시 오는 HTTP Method허용(*은 모두 허용)
         configuration.addAllowedMethod("*");
         // 헤더 허용(*은 모두 허용)
         configuration.addAllowedHeader("*");
 
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
 
 //        configuration.addExposedHeader("Authorization");
 //        configuration.addExposedHeader("Refresh-Token");
@@ -67,6 +64,7 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
 
+                .httpBasic().disable()
                 .cors()
                 .configurationSource(corsConfigurationSource())
 

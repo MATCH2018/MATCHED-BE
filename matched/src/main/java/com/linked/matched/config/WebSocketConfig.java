@@ -7,16 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocketMessageBroker
 @RequiredArgsConstructor
-public class StompWebSocketConfig implements WebSocketConfigurer  {
+@EnableWebSocket
+public class WebSocketConfig implements WebSocketConfigurer {
 
     private final ChatHandler chatHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler,"/stomp/chat")
-                .setAllowedOriginPatterns("http://*.*.*.*:8080")
-                .withSockJS();
+
+        registry.addHandler(chatHandler, "ws/chat").setAllowedOrigins("*");
     }
 }

@@ -17,8 +17,8 @@ public class PostController {
     private final PostService postService;
 
 
-    @GetMapping("/board/{boardName}")
-    public List<PostResponse> viewList(@PathVariable String boardName,@RequestBody PostSearch postSearch){
+    @GetMapping("/board/{boardName}")//RequestBody이 아니라 ModelAttribute로 넣어야한다.
+    public List<PostResponse> viewList(@PathVariable String boardName,@ModelAttribute PostSearch postSearch){
         return postService.getList(boardName,postSearch);
     }
 

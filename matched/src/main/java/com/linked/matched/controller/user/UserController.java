@@ -20,12 +20,12 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
 
-    @PostMapping("/login")
+    @PostMapping("/login") //받는값 바꾸어야 할 거 같다.
     public ResponseEntity<TokenDto> userLogin(@RequestBody UserLogin userLogin) {//토큰 값 response -0
         return ResponseEntity.ok(userService.login(userLogin));
     }
 
-    @PostMapping("/reissue")
+    @PostMapping("/reissue") //받는 값 한번 다시 생각해보자
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return ResponseEntity.ok(userService.reissue(tokenRequestDto));
     }
