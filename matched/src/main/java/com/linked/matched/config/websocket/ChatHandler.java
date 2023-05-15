@@ -12,24 +12,29 @@ import java.util.List;
 @Component
 public class ChatHandler extends TextWebSocketHandler {
 
-    private List<WebSocketSession> list = new ArrayList<>();
+    private static List<WebSocketSession> list = new ArrayList<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        for(WebSocketSession sess : list) {
+
+        for(WebSocketSession sess: list) {
             sess.sendMessage(message);
         }
     }
 
-
+    /* Client가 접속 시 호출되는 메서드 */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
         list.add(session);
+
     }
+
+    /* Client가 접속 해제 시 호출되는 메서드드 */
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        //소켓 종료
+
         list.remove(session);
     }
 }

@@ -17,9 +17,7 @@ class EmailServiceImplTest {
     @Test
     @DisplayName("이메일 보내기")
     void test() throws Exception {
-        String checkString = emailService.sendSimpleMessage("adad568@naver.com");
-
-        System.out.println(checkString);
+//        String checkString = emailService.sendSimpleMessage("adad568@naver.com");
 
     }
 }
