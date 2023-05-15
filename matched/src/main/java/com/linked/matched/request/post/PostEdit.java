@@ -1,13 +1,16 @@
 package com.linked.matched.request.post;
 
 import com.linked.matched.entity.status.BoardStatus;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostEdit {
     private String title;
     private String content;

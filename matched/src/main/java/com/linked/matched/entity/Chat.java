@@ -21,6 +21,14 @@ public class Chat {
     private ReadStatus readCheck;// READ, NOT 형태
     private Date createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="room_id")
+    private Room room;
+
     @Builder
     public Chat(Long messageId, String message, ReadStatus readCheck, Date createdAt) {
         this.messageId = messageId;

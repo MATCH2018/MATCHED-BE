@@ -1,11 +1,14 @@
 package com.linked.matched.request.user;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEdit {
 
     private String name;

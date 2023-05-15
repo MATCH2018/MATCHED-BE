@@ -25,8 +25,12 @@ public class Post {
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
     private Integer limitPeople;
+
     @Enumerated(EnumType.STRING)
     private BoardStatus boardName;
+
+    @Column(nullable = false)
+    private boolean reported;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -53,5 +57,9 @@ public class Post {
         this.updateAt= LocalDateTime.now();
         this.limitPeople=postEdit.getLimitPeople();
         this.boardName=postEdit.getBoardName();
+    }
+
+    public void makeStatusReported() {
+        this.reported = true;
     }
 }

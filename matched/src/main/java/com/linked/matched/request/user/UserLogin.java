@@ -1,10 +1,13 @@
 package com.linked.matched.request.user;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLogin {
 
     private String loginId;

@@ -71,15 +71,9 @@ class PostControllerTest {
 
         postRepository.save(request3);
 
-        PostSearch page = PostSearch.builder()
-                .page(1)
-                .build();
 
-        String json = objectMapper.writeValueAsString(page);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/board/{boardName}", "club")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+        mockMvc.perform(MockMvcRequestBuilders.get("/board/{boardName}?page=1&size=10", "club")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("제목입니다3."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("제목입니다1."))

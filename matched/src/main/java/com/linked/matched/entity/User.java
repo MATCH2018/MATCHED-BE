@@ -1,7 +1,7 @@
 package com.linked.matched.entity;
 
+import com.linked.matched.entity.status.AuthUserStatus;
 import com.linked.matched.entity.status.RoleStatus;
-import com.linked.matched.request.user.PwdEdit;
 import com.linked.matched.request.user.UserEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,11 @@ public class User {
     private Integer gradle;
     private Date birth;
     private String sex;
-    private Date createDate;
+    private AuthUserStatus authUserStatus;
+    private LocalDate createDate;
+
+    @Column(nullable = false)
+    private boolean reported;
 
     @Enumerated(EnumType.STRING)
     private RoleStatus roleStatus;
@@ -36,8 +41,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notice> notices = new ArrayList<>();
+
     @Builder
-    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, Date createDate, RoleStatus roleStatus) {
+    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, AuthUserStatus authUserStatus, RoleStatus roleStatus) {
         this.userId = userId;
         this.loginId = loginId;
         this.password = password;
@@ -46,7 +57,8 @@ public class User {
         this.gradle = gradle;
         this.birth = birth;
         this.sex = sex;
-        this.createDate = createDate;
+        this.authUserStatus = authUserStatus;
+        this.createDate = LocalDate.now();
         this.roleStatus = roleStatus;
     }
 
@@ -60,5 +72,9 @@ public class User {
 
     public void passwordEdit(String pwdEdit) {
         this.password=pwdEdit;
+    }
+
+    public void makeStatusReported() {
+        this.reported = true;
     }
 }
