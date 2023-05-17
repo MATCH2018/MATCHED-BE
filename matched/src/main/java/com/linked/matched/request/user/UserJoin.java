@@ -2,13 +2,16 @@ package com.linked.matched.request.user;
 
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.RoleStatus;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserJoin {
 
     private String loginId;

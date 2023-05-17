@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -23,6 +21,10 @@ public class Notice {
     private String title;
     private String content;
     private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
     public Notice(Long noticeId, String title, String content) {
