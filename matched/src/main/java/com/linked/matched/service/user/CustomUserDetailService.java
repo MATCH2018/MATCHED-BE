@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(UserNotFound::new);
     }
     private UserDetails createUserDetails(User user) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getRoleStatus().toString());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthorityName());
 
         return new org.springframework.security.core.userdetails.User(
                 String.valueOf(user.getUserId()),

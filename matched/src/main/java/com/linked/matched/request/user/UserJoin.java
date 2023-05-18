@@ -1,7 +1,6 @@
 package com.linked.matched.request.user;
 
 import com.linked.matched.entity.User;
-import com.linked.matched.entity.status.RoleStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,11 +21,11 @@ public class UserJoin {
     private Integer gradle;
     private Date birth;
     private String sex;
+    private String authorityName;
     private LocalDate createDate;
-    private RoleStatus roleStatus;
 
     @Builder
-    public UserJoin(String loginId, String password, String checkPassword, String name, String department, Integer gradle, Date birth, String sex, LocalDate createDate, RoleStatus roleStatus) {
+    public UserJoin(String loginId, String password, String checkPassword, String name, String department, Integer gradle, Date birth, String sex, String authorityName) {
         this.loginId = loginId;
         this.password = password;
         this.checkPassword = checkPassword;
@@ -35,11 +34,9 @@ public class UserJoin {
         this.gradle = gradle;
         this.birth = birth;
         this.sex = sex;
-        this.createDate = createDate;
-        this.roleStatus = roleStatus;
+        this.authorityName = authorityName;
+        this.createDate = LocalDate.now();
     }
-
-
 
 
     public User toEntity(String password){
@@ -51,7 +48,7 @@ public class UserJoin {
                 .gradle(gradle)
                 .birth(birth)
                 .sex(sex)
-                .roleStatus(RoleStatus.ROLE_USER)
+                .authorityName("ROLE_USER") //admin은 ROLE_ADMIN
                 .build();
     }
 
