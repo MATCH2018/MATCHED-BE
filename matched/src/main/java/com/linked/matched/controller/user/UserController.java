@@ -41,10 +41,10 @@ public class UserController {
     }
 
     @PostMapping("/email")
-    public String userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
+    public ResponseEntity<String> userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
         String confirm = emailService.sendSimpleMessage(email);
 
-        return confirm;
+        return ResponseEntity.ok(confirm);
     }
 
     @PostMapping("/{userId}/password_change")

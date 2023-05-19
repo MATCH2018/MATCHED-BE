@@ -45,6 +45,9 @@ dependencies {
 	//mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+	//notnull 등
+	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.10'
+	
 	compileOnly 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'

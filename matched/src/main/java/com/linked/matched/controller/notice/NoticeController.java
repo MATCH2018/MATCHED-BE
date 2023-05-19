@@ -5,6 +5,7 @@ import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
 import com.linked.matched.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class NoticeController {
     }
 
     @PostMapping("/board/notice")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public void createNotice(@RequestBody NoticeCreate noticeCreate){
         noticeService.writeNotice(noticeCreate);
     }
@@ -31,11 +33,13 @@ public class NoticeController {
     }
 
     @PatchMapping("/board/notice/{noticeId}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public void editNotice(@PathVariable Long noticeId, @RequestBody NoticeEdit noticeEdit){
         noticeService.editNotice(noticeId,noticeEdit);
     }
 
     @DeleteMapping("/board/notice/{noticeId}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteNotice(@PathVariable Long noticeId){
         noticeService.deleteNotice(noticeId);
     }

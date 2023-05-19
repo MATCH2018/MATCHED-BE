@@ -1,7 +1,6 @@
 package com.linked.matched.entity;
 
-import com.linked.matched.entity.status.AuthUserStatus;
-import com.linked.matched.entity.status.RoleStatus;
+
 import com.linked.matched.request.user.UserEdit;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,14 +28,11 @@ public class User {
     private Integer gradle;
     private Date birth;
     private String sex;
-    private AuthUserStatus authUserStatus;
+    private String authorityName;
     private LocalDate createDate;
 
     @Column(nullable = false)
-    private boolean reported;
-
-    @Enumerated(EnumType.STRING)
-    private RoleStatus roleStatus;
+    private boolean reported;// 신고 기능
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
@@ -48,7 +44,7 @@ public class User {
     private List<Notice> notices = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, AuthUserStatus authUserStatus, RoleStatus roleStatus) {
+    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, String authorityName) {
         this.userId = userId;
         this.loginId = loginId;
         this.password = password;
@@ -57,9 +53,8 @@ public class User {
         this.gradle = gradle;
         this.birth = birth;
         this.sex = sex;
-        this.authUserStatus = authUserStatus;
+        this.authorityName = authorityName;
         this.createDate = LocalDate.now();
-        this.roleStatus = roleStatus;
     }
 
     public void edit(UserEdit userEdit) {
