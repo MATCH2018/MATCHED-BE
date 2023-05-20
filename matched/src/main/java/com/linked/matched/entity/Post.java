@@ -39,6 +39,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Category> categories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Applicant> applicants = new ArrayList<>();
+
 
     @Builder
     public Post(Long postId, String title, String content, Integer limitPeople, BoardStatus boardName) {

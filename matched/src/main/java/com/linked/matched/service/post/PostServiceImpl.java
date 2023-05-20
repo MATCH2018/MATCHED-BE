@@ -1,9 +1,12 @@
 package com.linked.matched.service.post;
 
 import com.linked.matched.entity.Post;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.exception.PostNotFound;
+import com.linked.matched.exception.UserNotFound;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     public List<PostResponse> getList(String boardName, PostSearch postSearch) {
         //일단 넣어주야하는 값들이 이름을 넣어주면 그 이름에 대한 list값을 준다.
@@ -65,4 +70,15 @@ public class PostServiceImpl implements PostService{
 
         postRepository.delete(post);
     }
+
+    @Override
+    public List<PostResponse> findPostUser(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
+
+        return postRepository.findByUser(user).stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+    }
+
 }

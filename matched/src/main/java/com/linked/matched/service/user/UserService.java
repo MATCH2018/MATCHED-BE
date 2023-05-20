@@ -7,6 +7,7 @@ import com.linked.matched.request.user.UserEdit;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
+import com.linked.matched.response.user.UserMail;
 
 public interface UserService {
     void join(UserJoin userJoin) throws Exception;
@@ -23,4 +24,6 @@ public interface UserService {
     void edit(Long userId, UserEdit userEdit);
 
     void passwordEdit(Long userId, PwdEdit pwdEdit);
+
+    UserMail findUserEmail(Long applicantId);
 }
