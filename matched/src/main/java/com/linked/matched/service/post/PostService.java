@@ -18,4 +18,7 @@ public interface PostService {
     void edit(Long postId, PostEdit postEdit);
 
     void delete(Long postId);
+
+    List<PostResponse> findPostUser(Long userId);
+
 }

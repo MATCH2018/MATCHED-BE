@@ -13,6 +13,7 @@ import com.linked.matched.request.user.UserEdit;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
+import com.linked.matched.response.user.UserMail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -136,6 +137,11 @@ public class UserServiceImpl implements UserService{
         //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
         String encode = passwordEncoder.encode(pwdEdit.getNewPassword());
         user.passwordEdit(encode);
+    }
+
+    @Override
+    public UserMail findUserEmail(Long applicantId) {
+        return userRepository.findById(applicantId).map(UserMail::new).orElseThrow(UserNotFound::new);
     }
 
 
