@@ -3,8 +3,10 @@ package com.linked.matched.controller.notice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.Notice;
+import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,17 +45,28 @@ public class NoticeControllerDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void clean(){
         noticeRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("공지 저장")
     void test1() throws Exception {
+
+        User user = User.builder()
+                .build();
+
+        userRepository.save(user);
+
         NoticeCreate notice = NoticeCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
+                .userId(user.getUserId())
                 .build();
 
         String json = objectMapper.writeValueAsString(notice);
@@ -67,7 +80,9 @@ public class NoticeControllerDocsTest {
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("title").type(JsonFieldType.STRING).description("제목입니다."),
                                 PayloadDocumentation.fieldWithPath("content").type(JsonFieldType.STRING).description("내용입니다."),
-                                PayloadDocumentation.fieldWithPath("date").description("생성시간입니다.")
+                                PayloadDocumentation.fieldWithPath("createdAt").description("생성시간입니다."),
+                                PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저아이디")
+
                         ))
                 );
     }
@@ -149,7 +164,7 @@ public class NoticeControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("noticeId").description("게시글 ID"),
                                 PayloadDocumentation.fieldWithPath("title").description("제목"),
                                 PayloadDocumentation.fieldWithPath("content").description("내용"),
-                                PayloadDocumentation.fieldWithPath("date").description("날짜입니다.")
+                                PayloadDocumentation.fieldWithPath("createdAt").description("날짜입니다.")
                                 )
                 ));
     }
@@ -195,7 +210,7 @@ public class NoticeControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("[].noticeId").description("게시글입니다."),
                                 PayloadDocumentation.fieldWithPath("[].title").description("제목"),
                                 PayloadDocumentation.fieldWithPath("[].content").description("내용"),
-                                PayloadDocumentation.fieldWithPath("[].date").description("날짜입니다.")
+                                PayloadDocumentation.fieldWithPath("[].createdAt").description("날짜입니다.")
                          )
                 ));
     }

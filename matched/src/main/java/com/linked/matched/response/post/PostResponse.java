@@ -13,7 +13,6 @@ public class PostResponse {
     private final String title;
     private final String content;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updateAt;
     private final Integer limitPeople;
     private final BoardStatus boardName;
 
@@ -22,7 +21,6 @@ public class PostResponse {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
-        this.updateAt = post.getUpdateAt();
         this.limitPeople = post.getLimitPeople();
         this.boardName = post.getBoardName();
     }

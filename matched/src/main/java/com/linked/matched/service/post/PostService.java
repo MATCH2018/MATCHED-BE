@@ -21,4 +21,7 @@ public interface PostService {
 
     List<PostResponse> findPostUser(Long userId);
 
+    List<PostResponse> searchPost(String boardName,String keyword, PostSearch postSearch);
+
+    List<PostResponse> homeList();
 }

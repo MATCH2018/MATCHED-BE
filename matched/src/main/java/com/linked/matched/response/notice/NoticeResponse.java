@@ -11,12 +11,12 @@ public class NoticeResponse {
     private final Long noticeId;
     private final String title;
     private final String content;
-    private final LocalDate date;
+    private final LocalDate createdAt;
 
     public NoticeResponse(Notice notice) {
         this.noticeId = notice.getNoticeId();
         this.title = notice.getTitle();
         this.content = notice.getContent();
-        this.date = notice.getDate();
+        this.createdAt = notice.getCreatedAt();
     }
 }

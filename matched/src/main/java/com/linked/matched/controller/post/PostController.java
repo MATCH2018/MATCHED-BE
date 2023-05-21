@@ -6,6 +6,7 @@ import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,10 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/")
+    public List<PostResponse> webHome(){
+        return postService.homeList();
+    }
 
     @GetMapping("/board/{boardName}")//RequestBody이 아니라 ModelAttribute로 넣어야한다.
     public List<PostResponse> viewList(@PathVariable String boardName,@ModelAttribute PostSearch postSearch){
@@ -44,5 +49,8 @@ public class PostController {
     }
     
     //카테고리 넣는 검색
-
+    @GetMapping("/board/{boardName}/search")
+    public List<PostResponse> searchPost(@PathVariable String boardName,@RequestParam String keyword,@ModelAttribute PostSearch postSearch){
+        return postService.searchPost(boardName,keyword,postSearch);
+    }
 }

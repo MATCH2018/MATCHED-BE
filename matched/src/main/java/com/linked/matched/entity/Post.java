@@ -23,7 +23,6 @@ public class Post {
     private String title;
     private String content;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
     private Integer limitPeople;
 
     @Enumerated(EnumType.STRING)
@@ -36,28 +35,25 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Applicant> applicants = new ArrayList<>();
 
 
     @Builder
-    public Post(Long postId, String title, String content, Integer limitPeople, BoardStatus boardName) {
+    public Post(Long postId, String title, String content, Integer limitPeople, BoardStatus boardName,User user) {
         this.postId = postId;
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
-        this.updateAt = LocalDateTime.now();
         this.limitPeople = limitPeople;
         this.boardName = boardName;
+        this.user=user;
     }
 
     public void edit(PostEdit postEdit){
         this.title=postEdit.getTitle();
         this.content=postEdit.getContent();
-        this.updateAt= LocalDateTime.now();
         this.limitPeople=postEdit.getLimitPeople();
         this.boardName=postEdit.getBoardName();
     }

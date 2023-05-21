@@ -29,16 +29,13 @@ public class User {
     private Date birth;
     private String sex;
     private String authorityName;
-    private LocalDate createDate;
+    private LocalDate createdAt;
 
     @Column(nullable = false)
     private boolean reported;// 신고 기능
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Chat> chats = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notice> notices = new ArrayList<>();
@@ -54,7 +51,7 @@ public class User {
         this.birth = birth;
         this.sex = sex;
         this.authorityName = authorityName;
-        this.createDate = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
     public void edit(UserEdit userEdit) {

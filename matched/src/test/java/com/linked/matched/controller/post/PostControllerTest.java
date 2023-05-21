@@ -2,8 +2,10 @@ package com.linked.matched.controller.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.Post;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
@@ -32,9 +34,13 @@ class PostControllerTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @AfterEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -83,12 +89,21 @@ class PostControllerTest {
     @Test
     @DisplayName("글 저장")
     void test2() throws Exception {
+
+        User user = User.builder()
+                .build();
+
+        userRepository.save(user);
+
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .limitPeople(3)
                 .boardName(BoardStatus.valueOf("club"))
+                .userId(user.getUserId())
                 .build();
+
+
 
         String json = objectMapper.writeValueAsString(request);
 
