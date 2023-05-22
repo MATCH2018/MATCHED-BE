@@ -1,5 +1,6 @@
 package com.linked.matched.controller.match;
 
+import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.response.user.SelectUser;
 import com.linked.matched.response.user.UserMail;
@@ -7,6 +8,8 @@ import com.linked.matched.service.match.ApplicantService;
 import com.linked.matched.service.post.PostService;
 import com.linked.matched.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,5 +45,16 @@ public class MatchController {
             return userEmail;
         }
         return null;
+    }
+    
+    //매칭 취소 시키기
+    @PostMapping("/{postId}/refuse/{applicantId}")//매칭을 거부햇다는 메시지를 남겨야한다.
+    public ResponseEntity<Object> refuseUser(@PathVariable Long postId, @PathVariable Long applicantId){
+        if(applicantService.check(applicantId,postId)){
+            applicantService.cancelApply(applicantId, postId);
+            return new ResponseEntity<>(new ResponseDto("매칭이 거부되었습니다."), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("지원한 매칭이 없습니다."), HttpStatus.OK);
+
     }
 }

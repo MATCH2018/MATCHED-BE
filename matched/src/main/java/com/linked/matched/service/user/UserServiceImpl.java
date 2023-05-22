@@ -14,6 +14,7 @@ import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
+import com.linked.matched.response.user.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -142,6 +143,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserMail findUserEmail(Long applicantId) {
         return userRepository.findById(applicantId).map(UserMail::new).orElseThrow(UserNotFound::new);
+    }
+
+    @Override
+    public UserProfile viewUser(Long userId) {
+        return userRepository.findById(userId)
+                .map(UserProfile::new)
+                .orElseThrow(() -> new UserNotFound());
     }
 
 

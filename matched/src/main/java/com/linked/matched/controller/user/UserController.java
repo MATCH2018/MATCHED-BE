@@ -4,12 +4,15 @@ import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
 import com.linked.matched.request.user.PwdEdit;
 import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
+import com.linked.matched.response.user.UserProfile;
 import com.linked.matched.service.user.EmailService;
 import com.linked.matched.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,13 +34,17 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public void userLogout(@RequestBody DeleteTokenDto deleteTokenDto){
+    public ResponseEntity<Object> userLogout(@RequestBody DeleteTokenDto deleteTokenDto){ // 로그아웃 되었습니다.
         userService.refreshTokenDelete(deleteTokenDto);
+        return new ResponseEntity<>(new ResponseDto("로그아웃 되었습니다."), HttpStatus.OK);
+
     }
 
     @PostMapping("/join")
-    public void userJoin(@RequestBody UserJoin join) throws Exception {
+    public ResponseEntity<Object> userJoin(@RequestBody UserJoin join) throws Exception { // 회원가입 되었습니다.
         userService.join(join);
+        return new ResponseEntity<>(new ResponseDto("회원가입 되었습니다."), HttpStatus.OK);
+
     }
 
     @GetMapping("/email")
@@ -48,18 +55,29 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/password_change")
-    public void userPasswordFind(@PathVariable Long userId,@RequestBody PwdEdit pwdEdit) {//(password/edit) -0
+    public ResponseEntity<Object> userPasswordFind(@PathVariable Long userId,@RequestBody PwdEdit pwdEdit) {//비밀번호가 변경되었습니다.
         userService.passwordEdit(userId,pwdEdit);
+        return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
+
     }
 
     @PatchMapping("/my/{userId}")//id 값 바꿔주기
-    public void userEdit(@PathVariable Long userId, @RequestBody UserEdit userEdit){//얘도 그냥 edit 각
+    public ResponseEntity<Object> userEdit(@PathVariable Long userId, @RequestBody UserEdit userEdit){//회원정보가 수정되었습니다.
         userService.edit(userId, userEdit);
+        return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
+
     }
 
-    @DeleteMapping("/my/{userId}")
-    public void userDelete(@PathVariable Long userId){//그냥 삭제해주면 될듯
+    @DeleteMapping("/my/{userId}") // 회원탈퇴 되었습니다.
+    public ResponseEntity<Object> userDelete(@PathVariable Long userId){//그냥 삭제해주면 될듯
         userService.deleteUser(userId);
+        return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
+
     }
     
+    //누르면 회원정보를 보게하는 것
+    @GetMapping("/profile/{userId}")
+    public UserProfile profileFind(@PathVariable Long userId){
+        return userService.viewUser(userId);
+    }
 }

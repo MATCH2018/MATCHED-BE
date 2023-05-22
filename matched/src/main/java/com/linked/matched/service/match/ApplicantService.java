@@ -50,6 +50,7 @@ public class ApplicantService {
         Applicant applicant = applicantRepository.findByUserAndPost(user, post).orElseThrow(() -> new NotApplicant());
 
         applicantRepository.delete(applicant);
+
     }
 
     public List<SelectUser> findUserAndPost(Long postId) {

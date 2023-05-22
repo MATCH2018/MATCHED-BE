@@ -3,10 +3,13 @@ package com.linked.matched.controller.post;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Parameter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +30,11 @@ public class PostController {
         return postService.getList(boardName,postSearch);
     }
 
-    @PostMapping("/board/{boardName}")
-    public void createPost(@PathVariable String boardName,@RequestBody PostCreate postCreate){
+    @PostMapping("/board/{boardName}") //게시글 작성이 되었습니다.
+    public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate){
         postService.write(postCreate);//dto로 만들어서 만들때 필요한것을 넣어준다.
+        return new ResponseEntity<>(new ResponseDto("게시글 작성이 되었습니다."), HttpStatus.OK);
+
     }
 
     @GetMapping("/board/{boardName}/{postId}")
@@ -37,15 +42,19 @@ public class PostController {
         return postService.findPost(postId);
     }
 
-    @PatchMapping("/board/{boardName}/{postId}")
-    public void editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit){
+    @PatchMapping("/board/{boardName}/{postId}")// 게시글이 수정 되었습니다.
+    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit){
         //request body
         postService.edit(postId,postEdit);
+        return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
+
     }
 
-    @DeleteMapping("/board/{boardName}/{postId}")
-    public void deletePost(@PathVariable String boardName,@PathVariable Long postId)  {
+    @DeleteMapping("/board/{boardName}/{postId}") // 게시글이 삭제 되었습니다.
+    public ResponseEntity<Object> deletePost(@PathVariable String boardName,@PathVariable Long postId)  {
         postService.delete(postId);//예외 처리 따로 해줘야한다.
+        return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
+
     }
     
     //카테고리 넣는 검색
