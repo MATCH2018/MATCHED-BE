@@ -34,7 +34,7 @@ public class ReportService {
         User reporter = userRepository.findByName(authentication.getName()).orElseThrow(UserNotFound::new);
         User reportedUser = userRepository.findById(req.getReportUserId()).orElseThrow(UserNotFound::new);
 
-        if(reporter.getUserId() == req.getReportUserId()) {
+        if(reporter.getUserId().equals(req.getReportUserId())) {
             // 자기 자신을 신고한 경우 + 예외 만들어줘야한다.
             throw new NotSelfReport();
         }
@@ -65,7 +65,7 @@ public class ReportService {
         User reporter = userRepository.findByName(authentication.getName()).orElseThrow(UserNotFound::new);
         Post reportedPost = postRepository.findById(req.getReportedPostId()).orElseThrow(PostNotFound::new);
 
-        if(reporter.getUserId() == reportedPost.getUser().getUserId()) {
+        if(reporter.getUserId().equals(reportedPost.getUser().getUserId())) {
             throw new NotSelfReport();
         }
 

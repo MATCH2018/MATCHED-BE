@@ -2,7 +2,10 @@ package com.linked.matched.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.Notice;
+import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
+import com.linked.matched.repository.user.UserRepository;
+import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,17 +35,27 @@ class NoticeControllerTest {
     @Autowired
     private NoticeRepository noticeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void clean(){
         noticeRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("공지 생성")
     void test1() throws Exception {
-        Notice notice = Notice.builder()
+        User user = User.builder()
+                .build();
+
+        userRepository.save(user);
+
+        NoticeCreate notice = NoticeCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
+                .userId(user.getUserId())
                 .build();
 
         String json = objectMapper.writeValueAsString(notice);

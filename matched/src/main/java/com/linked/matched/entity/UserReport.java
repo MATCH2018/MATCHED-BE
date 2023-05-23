@@ -26,7 +26,7 @@ public class UserReport {
 
     private String content;
 
-    private LocalDate createAt;
+    private LocalDate createdAt;
 
     @Builder
     public UserReport(Long id, Long reporterId, Long reporterUserId, String content) {
@@ -34,7 +34,7 @@ public class UserReport {
         this.reporterId = reporterId;
         this.reporterUserId = reporterUserId;
         this.content = content;
-        this.createAt = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
 

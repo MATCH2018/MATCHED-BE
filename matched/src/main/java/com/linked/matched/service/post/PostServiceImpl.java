@@ -43,11 +43,15 @@ public class PostServiceImpl implements PostService{
     }
 
     public void write(PostCreate postCreate) {
+
+        User user = userRepository.findById(postCreate.getUserId()).orElseThrow(() -> new UserNotFound());
+
         Post post = Post.builder()
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
                 .limitPeople(postCreate.getLimitPeople())
                 .boardName(postCreate.getBoardName())
+                .user(user)
                 .build();
 
         postRepository.save(post);
@@ -77,6 +81,20 @@ public class PostServiceImpl implements PostService{
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
 
         return postRepository.findByUser(user).stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostResponse> searchPost(String boardName, String keyword, PostSearch postSearch) {
+        return postRepository.findAllKeywordOrderByCreatedAt(BoardStatus.valueOf(boardName),keyword,postSearch).stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostResponse> homeList() {
+        return postRepository.findAllCategory().stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }

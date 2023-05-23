@@ -18,16 +18,15 @@ public class PostCreate {
     private LocalDate createdAt;
     private Integer limitPeople;
     private BoardStatus boardName;
-    //category
-    private String categoryName;
+    private Long userId;
 
     @Builder
-    public PostCreate(String title, String content, Integer limitPeople, BoardStatus boardName, String categoryName) {
+    public PostCreate(String title, String content, Integer limitPeople, BoardStatus boardName,Long userId) {
         this.title = title;
         this.content = content;
         this.createdAt = LocalDate.now();
         this.limitPeople = limitPeople;
         this.boardName = boardName;
-        this.categoryName = categoryName;
+        this.userId=userId;
     }
 }

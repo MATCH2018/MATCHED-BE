@@ -3,8 +3,10 @@ package com.linked.matched.controller.post;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.Post;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
@@ -50,9 +52,13 @@ public class PostControllerDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @AfterEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -85,7 +91,6 @@ public class PostControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("content").description("내용"),
                                 PayloadDocumentation.fieldWithPath("limitPeople").description("인원제한 수"),
                                 PayloadDocumentation.fieldWithPath("createdAt").description("만든 시간"),
-                                PayloadDocumentation.fieldWithPath("updateAt").description("업데이트 시간"),
                                 PayloadDocumentation.fieldWithPath("boardName").description("검색 종류-ex)club,capstone,poom,tutoring")
                         )
                 ));
@@ -95,12 +100,18 @@ public class PostControllerDocsTest {
     @Test
     @DisplayName("글 저장하기")
     void test2() throws Exception {
+
+        User user = User.builder()
+                .build();
+
+        userRepository.save(user);
+
         PostCreate request = PostCreate.builder()
                 .title("제목입니다1.")
                 .content("내용입니다1.")
                 .limitPeople(3)
-                .categoryName("팀원")
                 .boardName(BoardStatus.valueOf("club"))
+                .userId(user.getUserId())
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -117,14 +128,17 @@ public class PostControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성시간입니다."),
                                 PayloadDocumentation.fieldWithPath("limitPeople").type(JsonFieldType.NUMBER).description(3),
                                 PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring"),
-                                PayloadDocumentation.fieldWithPath("categoryName").type(JsonFieldType.STRING).description("카테고리 종류")
-                        ))
+                                PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저아이디")
+
+                                ))
                 );
     }
     
     @Test
     @DisplayName("글 수정")
     void test3() throws Exception {
+
+
         Post request = Post.builder()
                 .postId(1L)
                 .title("제목입니다1.")
@@ -151,10 +165,8 @@ public class PostControllerDocsTest {
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("title").type(JsonFieldType.STRING).description("제목입니다."),
                                 PayloadDocumentation.fieldWithPath("content").type(JsonFieldType.STRING).description("내용입니다."),
-                                PayloadDocumentation.fieldWithPath("updateAt").type(JsonFieldType.STRING).description("업데이트 시간입니다."),
                                 PayloadDocumentation.fieldWithPath("limitPeople").type(JsonFieldType.NUMBER).description("인원 수 입니다."),
-                                PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring"),
-                                PayloadDocumentation.fieldWithPath("categoryName").description("카테고리 종류")
+                                PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring")
                         ))
                 );
     }
@@ -234,7 +246,6 @@ public class PostControllerDocsTest {
                                     PayloadDocumentation.fieldWithPath("[].content").description("내용"),
                                     PayloadDocumentation.fieldWithPath("[].limitPeople").description("인원제한 수"),
                                     PayloadDocumentation.fieldWithPath("[].createdAt").description("만든 시간"),
-                                    PayloadDocumentation.fieldWithPath("[].updateAt").description("업데이트 시간"),
                                     PayloadDocumentation.fieldWithPath("[].boardName").description("검색 종류-ex)club,capstone,poom,tutoring")
                         )
                 ));

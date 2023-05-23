@@ -8,6 +8,7 @@ import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
+import com.linked.matched.response.user.UserProfile;
 
 public interface UserService {
     void join(UserJoin userJoin) throws Exception;
@@ -26,4 +27,6 @@ public interface UserService {
     void passwordEdit(Long userId, PwdEdit pwdEdit);
 
     UserMail findUserEmail(Long applicantId);
+
+     UserProfile viewUser(Long userId);
 }

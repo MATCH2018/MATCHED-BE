@@ -1,8 +1,10 @@
 package com.linked.matched.service.post;
 
 import com.linked.matched.entity.Post;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
@@ -28,20 +30,30 @@ class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void clean(){
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("글 작성")
     void test(){
+
+        User user = User.builder()
+                .build();
+
+        userRepository.save(user);
         //given
         PostCreate postCreate = PostCreate.builder()
                 .title("제목임다.")
                 .content("내용임다.")
                 .limitPeople(8)
                 .boardName(BoardStatus.valueOf("club"))
+                .userId(user.getUserId())
                 .build();
 
         //when

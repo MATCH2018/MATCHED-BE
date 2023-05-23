@@ -1,8 +1,11 @@
 package com.linked.matched.service.notice;
 
 import com.linked.matched.entity.Notice;
+import com.linked.matched.entity.User;
 import com.linked.matched.exception.PostNotFound;
+import com.linked.matched.exception.UserNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeRepository noticeRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<NoticeResponse> getList(){
@@ -35,9 +39,13 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public void writeNotice(NoticeCreate noticeCreate){
+
+        User user = userRepository.findById(noticeCreate.getUserId()).orElseThrow(() -> new UserNotFound());
+
         Notice notice=Notice.builder()
                 .title(noticeCreate.getTitle())
                 .content(noticeCreate.getContent())
+                .user(user)
                 .build();
 
         noticeRepository.save(notice);

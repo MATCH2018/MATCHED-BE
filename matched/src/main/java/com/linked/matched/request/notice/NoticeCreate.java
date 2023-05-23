@@ -12,12 +12,14 @@ import java.time.LocalDate;
 public class NoticeCreate {
     private String title;
     private String content;
-    private LocalDate date;
+    private LocalDate createdAt;
+    private Long userId;
 
     @Builder
-    public NoticeCreate(String title, String content) {
+    public NoticeCreate(String title, String content,Long userId) {
         this.title = title;
         this.content = content;
-        this.date = LocalDate.now();
+        this.createdAt = LocalDate.now();
+        this.userId=userId;
     }
 }

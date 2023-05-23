@@ -20,18 +20,19 @@ public class Notice {
     private Long noticeId;
     private String title;
     private String content;
-    private LocalDate date;
+    private LocalDate createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public Notice(Long noticeId, String title, String content) {
+    public Notice(Long noticeId, String title, String content,User user) {
         this.noticeId = noticeId;
         this.title = title;
         this.content = content;
-        this.date = LocalDate.now();
+        this.createdAt = LocalDate.now();
+        this.user = user;
     }
 
     public void edit(NoticeEdit noticeEdit) {

@@ -22,7 +22,7 @@ public class UserJoin {
     private Date birth;
     private String sex;
     private String authorityName;
-    private LocalDate createDate;
+    private LocalDate createdAt;
 
     @Builder
     public UserJoin(String loginId, String password, String checkPassword, String name, String department, Integer gradle, Date birth, String sex, String authorityName) {
@@ -35,7 +35,7 @@ public class UserJoin {
         this.birth = birth;
         this.sex = sex;
         this.authorityName = authorityName;
-        this.createDate = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
 
