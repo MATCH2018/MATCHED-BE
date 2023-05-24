@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -48,36 +50,36 @@ public class UserController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<String> userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
+    public ResponseEntity<Object> userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
         String confirm = emailService.sendSimpleMessage(email);
 
-        return ResponseEntity.ok(confirm);
+        return new ResponseEntity<>(new ResponseDto(confirm), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}/password_change")
-    public ResponseEntity<Object> userPasswordFind(@PathVariable Long userId,@RequestBody PwdEdit pwdEdit) {//비밀번호가 변경되었습니다.
-        userService.passwordEdit(userId,pwdEdit);
+    @PostMapping("/password_change")
+    public ResponseEntity<Object> userPasswordFind(@RequestBody PwdEdit pwdEdit, Principal principal) {//비밀번호가 변경되었습니다.
+        userService.passwordEdit(principal,pwdEdit);
         return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
 
     }
 
-    @PatchMapping("/my/{userId}")//id 값 바꿔주기
-    public ResponseEntity<Object> userEdit(@PathVariable Long userId, @RequestBody UserEdit userEdit){//회원정보가 수정되었습니다.
-        userService.edit(userId, userEdit);
+    @PatchMapping("/my")//id 값 바꿔주기
+    public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,Principal principal){//회원정보가 수정되었습니다.
+        userService.edit(principal, userEdit);
         return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
 
     }
 
-    @DeleteMapping("/my/{userId}") // 회원탈퇴 되었습니다.
-    public ResponseEntity<Object> userDelete(@PathVariable Long userId){//그냥 삭제해주면 될듯
-        userService.deleteUser(userId);
+    @DeleteMapping("/my") // 회원탈퇴 되었습니다.
+    public ResponseEntity<Object> userDelete(Principal principal){//그냥 삭제해주면 될듯
+        userService.deleteUser(principal);
         return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
 
     }
     
     //누르면 회원정보를 보게하는 것
-    @GetMapping("/profile/{userId}")
-    public UserProfile profileFind(@PathVariable Long userId){
-        return userService.viewUser(userId);
+    @GetMapping("/profile")
+    public UserProfile profileFind(Principal principal){
+        return userService.viewUser(principal);
     }
 }

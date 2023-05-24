@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,13 +26,13 @@ public class MatchController {
     private final PostService postService;
     private final ApplicantService applicantService;
 
-    @GetMapping("/{userId}/match")
-    public List<PostResponse> postList(@PathVariable Long userId){//list로 받는데 querydsl을 사용해야한다.
-       return postService.findPostUser(userId);
+    @GetMapping("/match")
+    public List<PostResponse> postList(Principal principal){//list로 받는데 querydsl을 사용해야한다.
+       return postService.findPostUser(principal);
     }
 
-    @GetMapping("/{userId}/match/{postId}")
-    public List<SelectUser> postUser(@PathVariable Long userId, @PathVariable Long postId){
+    @GetMapping("/match/{postId}")
+    public List<SelectUser> postUser(@PathVariable Long postId){
         return applicantService.findUserAndPost(postId);
     }
 
@@ -41,7 +42,7 @@ public class MatchController {
         if(applicantService.check(applicantId,postId)){
             UserMail userEmail = userService.findUserEmail(applicantId);
 
-            applicantService.cancelApply(applicantId, postId);
+            applicantService.cancelMatch(applicantId, postId);
             return userEmail;
         }
         return null;
@@ -51,7 +52,7 @@ public class MatchController {
     @PostMapping("/{postId}/refuse/{applicantId}")//매칭을 거부햇다는 메시지를 남겨야한다.
     public ResponseEntity<Object> refuseUser(@PathVariable Long postId, @PathVariable Long applicantId){
         if(applicantService.check(applicantId,postId)){
-            applicantService.cancelApply(applicantId, postId);
+            applicantService.cancelMatch(applicantId, postId);
             return new ResponseEntity<>(new ResponseDto("매칭이 거부되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("지원한 매칭이 없습니다."), HttpStatus.OK);

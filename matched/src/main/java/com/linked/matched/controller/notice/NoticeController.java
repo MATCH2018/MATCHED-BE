@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -26,8 +27,8 @@ public class NoticeController {
 
     @PostMapping("/board/notice")
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<Object> createNotice(@RequestBody NoticeCreate noticeCreate){// 공지 작성이 되었습니다.
-        noticeService.writeNotice(noticeCreate);
+    public ResponseEntity<Object> createNotice(@RequestBody NoticeCreate noticeCreate, Principal principal){// 공지 작성이 되었습니다.
+        noticeService.writeNotice(noticeCreate,principal);
         return new ResponseEntity<>(new ResponseDto("공지 작성이 되었습니다."), HttpStatus.OK);
     }
 

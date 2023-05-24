@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public List<PostResponse> webHome(){
         return postService.homeList();
     }
@@ -31,8 +32,8 @@ public class PostController {
     }
 
     @PostMapping("/board/{boardName}") //게시글 작성이 되었습니다.
-    public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate){
-        postService.write(postCreate);//dto로 만들어서 만들때 필요한것을 넣어준다.
+    public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate,Principal principal){
+        postService.write(postCreate,principal);//dto로 만들어서 만들때 필요한것을 넣어준다.
         return new ResponseEntity<>(new ResponseDto("게시글 작성이 되었습니다."), HttpStatus.OK);
 
     }
@@ -43,18 +44,20 @@ public class PostController {
     }
 
     @PatchMapping("/board/{boardName}/{postId}")// 게시글이 수정 되었습니다.
-    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit){
+    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit, Principal principal){
         //request body
-        postService.edit(postId,postEdit);
-        return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
-
+        if(postService.edit(postId, postEdit,principal)) {
+            return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/board/{boardName}/{postId}") // 게시글이 삭제 되었습니다.
-    public ResponseEntity<Object> deletePost(@PathVariable String boardName,@PathVariable Long postId)  {
-        postService.delete(postId);//예외 처리 따로 해줘야한다.
-        return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
-
+    public ResponseEntity<Object> deletePost(@PathVariable String boardName, @PathVariable Long postId, Principal principal)  {
+        if(postService.delete(postId,principal)) {
+            return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
     }
     
     //카테고리 넣는 검색

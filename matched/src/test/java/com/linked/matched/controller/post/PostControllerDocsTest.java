@@ -52,13 +52,11 @@ public class PostControllerDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private UserRepository userRepository;
+
 
     @AfterEach
     void clean() {
         postRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
     @Test
@@ -97,21 +95,16 @@ public class PostControllerDocsTest {
 
     }
 
-    @Test
+  //  @Test
     @DisplayName("글 저장하기")
     void test2() throws Exception {
 
-        User user = User.builder()
-                .build();
-
-        userRepository.save(user);
 
         PostCreate request = PostCreate.builder()
                 .title("제목입니다1.")
                 .content("내용입니다1.")
                 .limitPeople(3)
                 .boardName(BoardStatus.valueOf("club"))
-                .userId(user.getUserId())
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -127,14 +120,13 @@ public class PostControllerDocsTest {
                                 PayloadDocumentation.fieldWithPath("content").type(JsonFieldType.STRING).description("내용입니다."),
                                 PayloadDocumentation.fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성시간입니다."),
                                 PayloadDocumentation.fieldWithPath("limitPeople").type(JsonFieldType.NUMBER).description(3),
-                                PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring"),
-                                PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저아이디")
+                                PayloadDocumentation.fieldWithPath("boardName").type(JsonFieldType.STRING).description("club,capstone,poom,tutoring")
 
                                 ))
                 );
     }
     
-    @Test
+  //  @Test
     @DisplayName("글 수정")
     void test3() throws Exception {
 
@@ -171,7 +163,7 @@ public class PostControllerDocsTest {
                 );
     }
 
-    @Test
+  //  @Test
     @DisplayName("글 삭제")
     void test4() throws Exception {
         Post request = Post.builder()

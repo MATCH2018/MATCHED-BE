@@ -10,6 +10,8 @@ import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
 import com.linked.matched.response.user.UserProfile;
 
+import java.security.Principal;
+
 public interface UserService {
     void join(UserJoin userJoin) throws Exception;
 
@@ -20,13 +22,13 @@ public interface UserService {
 
     void refreshTokenDelete(DeleteTokenDto deleteTokenDto);
 
-    void deleteUser(Long userId);
+    void deleteUser(Principal principal);
 
-    void edit(Long userId, UserEdit userEdit);
+    void edit(Principal principal, UserEdit userEdit);
 
-    void passwordEdit(Long userId, PwdEdit pwdEdit);
+    void passwordEdit(Principal principal, PwdEdit pwdEdit);
 
     UserMail findUserEmail(Long applicantId);
 
-     UserProfile viewUser(Long userId);
+     UserProfile viewUser(Principal principal);
 }

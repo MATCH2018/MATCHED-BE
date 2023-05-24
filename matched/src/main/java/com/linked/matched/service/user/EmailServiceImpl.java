@@ -88,7 +88,7 @@ public class EmailServiceImpl implements EmailService{
             emailSender.send(message);
         }catch(MailException es){
             es.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error sending email: " + es.getMessage());
         }
         return ePw;
     }

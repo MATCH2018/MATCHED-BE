@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +27,10 @@ public class User {
     private String name;
     private String department;
     private Integer gradle;
-    private Date birth;
+    private LocalDate birth;
     private String sex;
     private String authorityName;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean reported;// 신고 기능
@@ -41,7 +42,7 @@ public class User {
     private List<Notice> notices = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, Date birth, String sex, String authorityName) {
+    public User(Long userId, String loginId, String password, String name, String department, Integer gradle, LocalDate birth, String sex, String authorityName) {
         this.userId = userId;
         this.loginId = loginId;
         this.password = password;
@@ -51,7 +52,7 @@ public class User {
         this.birth = birth;
         this.sex = sex;
         this.authorityName = authorityName;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public void edit(UserEdit userEdit) {

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,9 +39,9 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void writeNotice(NoticeCreate noticeCreate){
+    public void writeNotice(NoticeCreate noticeCreate, Principal principal){
 
-        User user = userRepository.findById(noticeCreate.getUserId()).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Notice notice=Notice.builder()
                 .title(noticeCreate.getTitle())

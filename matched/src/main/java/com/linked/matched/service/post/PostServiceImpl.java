@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,9 +43,9 @@ public class PostServiceImpl implements PostService{
         return postRepository.findById(postId).map(PostResponse::new).orElseThrow(PostNotFound::new);
     }
 
-    public void write(PostCreate postCreate) {
+    public void write(PostCreate postCreate,Principal principal) {
 
-        User user = userRepository.findById(postCreate.getUserId()).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Post post = Post.builder()
                 .title(postCreate.getTitle())
@@ -58,27 +59,38 @@ public class PostServiceImpl implements PostService{
     }
 
     @Transactional
-    public void edit(Long postId, PostEdit postEdit) {
+    public Boolean edit(Long postId, PostEdit postEdit, Principal principal) {
         //게시글 정정
         //리턴 값 필요 없음?-그냥 기본으로 할까? 흠.....
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        post.edit(postEdit);
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+
+        if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
+            post.edit(postEdit);
+            return true;
+        }
+        return false;
     }
 
-    public void delete(Long postId) {
+    public Boolean delete(Long postId, Principal principal) {
         //삭제
         //리턴 값 필요 없음
         //예외처리 해줘야한다.
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        postRepository.delete(post);
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+        if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
+            postRepository.delete(post);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<PostResponse> findPostUser(Long userId) {
+    public List<PostResponse> findPostUser(Principal principal) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         return postRepository.findByUser(user).stream()
                 .map(PostResponse::new)

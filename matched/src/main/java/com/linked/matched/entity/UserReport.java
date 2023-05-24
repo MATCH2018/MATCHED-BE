@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -26,7 +27,7 @@ public class UserReport {
 
     private String content;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Builder
     public UserReport(Long id, Long reporterId, Long reporterUserId, String content) {
@@ -34,7 +35,7 @@ public class UserReport {
         this.reporterId = reporterId;
         this.reporterUserId = reporterUserId;
         this.content = content;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 

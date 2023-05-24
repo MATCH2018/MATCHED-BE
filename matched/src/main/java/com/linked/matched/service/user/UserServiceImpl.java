@@ -24,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+
 
 @Service
 @Transactional
@@ -115,22 +117,22 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public void deleteUser(Principal principal) {
+        userRepository.deleteById(Long.valueOf(principal.getName()));
     }
 
     @Override
     @Transactional
-    public void edit(Long userId, UserEdit userEdit) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public void edit(Principal principal, UserEdit userEdit) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
         //build를 다시해야한다. 어노테이션이 아니라 내가 build를 열어서 수정해야한다.
         user.edit(userEdit);
     }
 
     @Override
     @Transactional
-    public void passwordEdit(Long userId, PwdEdit pwdEdit) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public void passwordEdit(Principal principal, PwdEdit pwdEdit) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
@@ -146,8 +148,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserProfile viewUser(Long userId) {
-        return userRepository.findById(userId)
+    public UserProfile viewUser(Principal principal) {
+        return userRepository.findById(Long.valueOf(principal.getName()))
                 .map(UserProfile::new)
                 .orElseThrow(() -> new UserNotFound());
     }
