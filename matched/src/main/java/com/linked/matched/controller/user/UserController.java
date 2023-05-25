@@ -2,12 +2,9 @@ package com.linked.matched.controller.user;
 
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
-import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.*;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.jwt.TokenDto;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserProfile;
 import com.linked.matched.service.user.EmailService;
 import com.linked.matched.service.user.UserService;
@@ -44,16 +41,23 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<Object> userJoin(@RequestBody UserJoin join) throws Exception { // 회원가입 되었습니다.
-        userService.join(join);
-        return new ResponseEntity<>(new ResponseDto("회원가입 되었습니다."), HttpStatus.OK);
+//        if(join.isValid()) {
+            userService.join(join);
+            return new ResponseEntity<>(new ResponseDto("회원가입 되었습니다."), HttpStatus.OK);
+//        }
 
+//        return new ResponseEntity<>(new ResponseDto("명지대 이메일을 이용해주세요"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Object> userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
-        String confirm = emailService.sendSimpleMessage(email);
+    public ResponseEntity<Object> userEmail(@RequestParam("email") UserEmail email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
 
-        return new ResponseEntity<>(new ResponseDto(confirm), HttpStatus.OK);
+        if(email.isValid()) {
+            String confirm = emailService.sendSimpleMessage(email);
+            return new ResponseEntity<>(new ResponseDto(confirm), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("명지대 이메일을 이용해주세요"), HttpStatus.BAD_REQUEST);
+
     }
 
     @PostMapping("/password_change")

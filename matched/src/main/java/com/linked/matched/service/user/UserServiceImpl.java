@@ -118,7 +118,9 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void deleteUser(Principal principal) {
-        userRepository.deleteById(Long.valueOf(principal.getName()));
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+
+        userRepository.delete(user);
     }
 
     @Override

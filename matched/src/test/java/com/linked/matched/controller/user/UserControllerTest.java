@@ -46,7 +46,7 @@ class UserControllerTest {
     @DisplayName("회원 가입")
     void test1() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -76,7 +76,7 @@ class UserControllerTest {
     @DisplayName("로그인 성공")
     void test2() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -94,7 +94,7 @@ class UserControllerTest {
         }
 
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 
@@ -111,7 +111,7 @@ class UserControllerTest {
     @DisplayName("로그인 성공")
     void test3() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -128,7 +128,7 @@ class UserControllerTest {
             e.printStackTrace();
         }
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 

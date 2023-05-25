@@ -15,6 +15,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*")    //URL
 //                .allowCredentials(true) // 보안과 관련되어있다. -false면 API 호출에 대한 인증 정보를 웹 브라우저에서 전송하지 않습니다
                 .allowedHeaders("Origin, X-Requested-With, Content-Type, Accept, Authorization")  //header
-                .allowedMethods("GET","POST","PATCH","DELETE");        //method
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");     //method
     }
 }

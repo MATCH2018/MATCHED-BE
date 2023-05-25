@@ -39,6 +39,11 @@ public class UserJoin {
         this.createdAt = LocalDateTime.now();
     }
 
+    public boolean isValid(){
+        String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@mju\\.ac\\.kr$";
+        return loginId != null && loginId.matches(emailPattern);
+    }
+
 
     public User toEntity(String password){
         return User.builder()
