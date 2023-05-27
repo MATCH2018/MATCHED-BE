@@ -10,13 +10,14 @@ import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,15 +37,15 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
-    public PostResponse findPost(Long postId) {
+    public PostOneResponse findPost(Long postId) {
         //목록중 내가 원하는 정보찾기
         //return 값 줘야한다. - querydsl 사용해야한다. 바뀔수 있다. 분류를 먼저하고 다시 찾을 수 있다.
-        return postRepository.findById(postId).map(PostResponse::new).orElseThrow(PostNotFound::new);
+        return postRepository.getPostAndUser(postId);
     }
 
-    public void write(PostCreate postCreate) {
+    public void write(PostCreate postCreate,Principal principal) {
 
-        User user = userRepository.findById(postCreate.getUserId()).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Post post = Post.builder()
                 .title(postCreate.getTitle())
@@ -58,27 +59,38 @@ public class PostServiceImpl implements PostService{
     }
 
     @Transactional
-    public void edit(Long postId, PostEdit postEdit) {
+    public Boolean edit(Long postId, PostEdit postEdit, Principal principal) {
         //게시글 정정
         //리턴 값 필요 없음?-그냥 기본으로 할까? 흠.....
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        post.edit(postEdit);
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+
+        if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
+            post.edit(postEdit);
+            return true;
+        }
+        return false;
     }
 
-    public void delete(Long postId) {
+    public Boolean delete(Long postId, Principal principal) {
         //삭제
         //리턴 값 필요 없음
         //예외처리 해줘야한다.
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        postRepository.delete(post);
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+        if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
+            postRepository.delete(post);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<PostResponse> findPostUser(Long userId) {
+    public List<PostResponse> findPostUser(Principal principal) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         return postRepository.findByUser(user).stream()
                 .map(PostResponse::new)

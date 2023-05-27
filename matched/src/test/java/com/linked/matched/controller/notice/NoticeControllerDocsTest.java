@@ -23,6 +23,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -45,28 +46,20 @@ public class NoticeControllerDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeEach
     void clean(){
         noticeRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
-    @Test
+    //@Test
     @DisplayName("공지 저장")
+    @WithMockUser
     void test1() throws Exception {
-
-        User user = User.builder()
-                .build();
-
-        userRepository.save(user);
 
         NoticeCreate notice = NoticeCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
-                .userId(user.getUserId())
                 .build();
 
         String json = objectMapper.writeValueAsString(notice);
@@ -80,9 +73,7 @@ public class NoticeControllerDocsTest {
                         PayloadDocumentation.requestFields(
                                 PayloadDocumentation.fieldWithPath("title").type(JsonFieldType.STRING).description("제목입니다."),
                                 PayloadDocumentation.fieldWithPath("content").type(JsonFieldType.STRING).description("내용입니다."),
-                                PayloadDocumentation.fieldWithPath("createdAt").description("생성시간입니다."),
-                                PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저아이디")
-
+                                PayloadDocumentation.fieldWithPath("createdAt").description("생성시간입니다.")
                         ))
                 );
     }

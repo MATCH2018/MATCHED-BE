@@ -2,13 +2,12 @@ package com.linked.matched.service.user;
 
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
-import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.*;
 import com.linked.matched.response.jwt.TokenDto;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
 import com.linked.matched.response.user.UserProfile;
+
+import java.security.Principal;
 
 public interface UserService {
     void join(UserJoin userJoin) throws Exception;
@@ -20,13 +19,15 @@ public interface UserService {
 
     void refreshTokenDelete(DeleteTokenDto deleteTokenDto);
 
-    void deleteUser(Long userId);
+    void deleteUser(Principal principal);
 
-    void edit(Long userId, UserEdit userEdit);
+    void edit(Principal principal, UserEdit userEdit);
 
-    void passwordEdit(Long userId, PwdEdit pwdEdit);
+    void passwordEdit(Principal principal, PwdEdit pwdEdit);
+
+    void passwordChange(PwdChange pwdChange);
 
     UserMail findUserEmail(Long applicantId);
 
-     UserProfile viewUser(Long userId);
+     UserProfile viewUser(Principal principal);
 }

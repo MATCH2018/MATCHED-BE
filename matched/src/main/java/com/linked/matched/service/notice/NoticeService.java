@@ -4,6 +4,7 @@ import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface NoticeService {
@@ -11,7 +12,7 @@ public interface NoticeService {
 
     NoticeResponse findNotice(Long noticeId);
 
-    void writeNotice(NoticeCreate noticeCreate);
+    void writeNotice(NoticeCreate noticeCreate, Principal principal);
 
     void editNotice(Long noticeId, NoticeEdit noticeEdit);
 

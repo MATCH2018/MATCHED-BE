@@ -3,18 +3,20 @@ package com.linked.matched.repository.post;
 
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.QPost;
-import com.linked.matched.entity.QUser;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.post.PostOneResponse;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import static com.linked.matched.entity.QPost.post;
 import static com.linked.matched.entity.QUser.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -58,4 +60,19 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
 
         return result;
     }
+
+    @Override
+    public PostOneResponse getPostAndUser(Long postId) {
+
+
+
+        return jpaQueryFactory.select(Projections
+                        .constructor(PostOneResponse.class,post.title,post.content,post.createdAt,post.limitPeople,post.boardName,user.userId,user.name,user.department))
+                .from(post)
+                .join(post.user,user)
+                .where(post.postId.eq(postId))
+                .fetchOne();
+    }
+
+
 }

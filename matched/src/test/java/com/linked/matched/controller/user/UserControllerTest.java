@@ -6,10 +6,7 @@ import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.service.user.UserService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,7 +37,7 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @AfterEach
+    @BeforeEach
     void clean() {
         userRepository.deleteAll();
     }
@@ -49,7 +46,7 @@ class UserControllerTest {
     @DisplayName("회원 가입")
     void test1() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -79,7 +76,7 @@ class UserControllerTest {
     @DisplayName("로그인 성공")
     void test2() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -97,7 +94,7 @@ class UserControllerTest {
         }
 
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 
@@ -114,7 +111,7 @@ class UserControllerTest {
     @DisplayName("로그인 성공")
     void test3() throws Exception {
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -131,7 +128,7 @@ class UserControllerTest {
             e.printStackTrace();
         }
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 

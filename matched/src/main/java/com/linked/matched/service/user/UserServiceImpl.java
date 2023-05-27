@@ -8,11 +8,8 @@ import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
-import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.*;
 import com.linked.matched.response.jwt.TokenDto;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
 import com.linked.matched.response.user.UserProfile;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.Principal;
 
 
 @Service
@@ -115,22 +114,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public void deleteUser(Principal principal) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+
+        userRepository.delete(user);
     }
 
     @Override
     @Transactional
-    public void edit(Long userId, UserEdit userEdit) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public void edit(Principal principal, UserEdit userEdit) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
         //build를 다시해야한다. 어노테이션이 아니라 내가 build를 열어서 수정해야한다.
         user.edit(userEdit);
     }
 
     @Override
     @Transactional
-    public void passwordEdit(Long userId, PwdEdit pwdEdit) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public void passwordEdit(Principal principal, PwdEdit pwdEdit) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
@@ -141,13 +142,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
+    public void passwordChange(PwdChange pwdChange) {
+        User user = userRepository.findByLoginId(pwdChange.getLoginId()).orElseThrow(() -> new UserNotFound());
+        //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
+
+        if (!pwdChange.getNewPassword().equals(pwdChange.getCheckPassword())) {
+            throw new NotEqualPassword();
+        }
+
+        String encode = passwordEncoder.encode(pwdChange.getNewPassword());
+        user.passwordEdit(encode);
+    }
+
+    @Override
     public UserMail findUserEmail(Long applicantId) {
         return userRepository.findById(applicantId).map(UserMail::new).orElseThrow(UserNotFound::new);
     }
 
     @Override
-    public UserProfile viewUser(Long userId) {
-        return userRepository.findById(userId)
+    public UserProfile viewUser(Principal principal) {
+        return userRepository.findById(Long.valueOf(principal.getName()))
                 .map(UserProfile::new)
                 .orElseThrow(() -> new UserNotFound());
     }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -19,13 +20,13 @@ public class UserJoin {
     private String name;
     private String department;
     private Integer gradle;
-    private Date birth;
+    private LocalDate birth;
     private String sex;
     private String authorityName;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Builder
-    public UserJoin(String loginId, String password, String checkPassword, String name, String department, Integer gradle, Date birth, String sex, String authorityName) {
+    public UserJoin(String loginId, String password, String checkPassword, String name, String department, Integer gradle, LocalDate birth, String sex, String authorityName) {
         this.loginId = loginId;
         this.password = password;
         this.checkPassword = checkPassword;
@@ -35,7 +36,12 @@ public class UserJoin {
         this.birth = birth;
         this.sex = sex;
         this.authorityName = authorityName;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public boolean isValid(){
+        String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@mju\\.ac\\.kr$";
+        return loginId != null && loginId.matches(emailPattern);
     }
 
 

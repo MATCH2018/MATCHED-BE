@@ -8,12 +8,13 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.linked.matched.entity.QApplicant.*;
 import static com.linked.matched.entity.QUser.user;
-
+@Repository
 @RequiredArgsConstructor
 public class ApplicantRepositoryImpl implements ApplicantRepositoryCustom{
 

@@ -2,12 +2,9 @@ package com.linked.matched.controller.user;
 
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
-import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.*;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.jwt.TokenDto;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserProfile;
 import com.linked.matched.service.user.EmailService;
 import com.linked.matched.service.user.UserService;
@@ -15,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,42 +41,55 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<Object> userJoin(@RequestBody UserJoin join) throws Exception { // 회원가입 되었습니다.
-        userService.join(join);
-        return new ResponseEntity<>(new ResponseDto("회원가입 되었습니다."), HttpStatus.OK);
+        if(join.isValid()) {
+            userService.join(join);
+            return new ResponseEntity<>(new ResponseDto("회원가입 되었습니다."), HttpStatus.OK);
+        }
 
+        return new ResponseEntity<>(new ResponseDto("명지대 이메일을 이용해주세요"), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<String> userEmail(@RequestParam("email") String email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
-        String confirm = emailService.sendSimpleMessage(email);
+    public String userEmail(@RequestParam("email") UserEmail email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
 
-        return ResponseEntity.ok(confirm);
+        if(email.isValid()) {
+            return emailService.sendSimpleMessage(email);
+        }
+        return "명지대 이메일을 이용해주세요";
+
     }
 
-    @PostMapping("/{userId}/password_change")
-    public ResponseEntity<Object> userPasswordFind(@PathVariable Long userId,@RequestBody PwdEdit pwdEdit) {//비밀번호가 변경되었습니다.
-        userService.passwordEdit(userId,pwdEdit);
+    @PostMapping("/password_edit")//로그인 되어있음
+    public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdEdit pwdEdit, Principal principal) {//비밀번호가 변경되었습니다.
+        userService.passwordEdit(principal,pwdEdit);
         return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
 
     }
 
-    @PatchMapping("/my/{userId}")//id 값 바꿔주기
-    public ResponseEntity<Object> userEdit(@PathVariable Long userId, @RequestBody UserEdit userEdit){//회원정보가 수정되었습니다.
-        userService.edit(userId, userEdit);
+    @PostMapping("/password_change")//로그인 안되어있음
+    public ResponseEntity<Object> userPasswordChange(@RequestBody PwdChange pwdChange) {//비밀번호가 변경되었습니다.
+        userService.passwordChange(pwdChange);
+        return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
+
+    }
+
+    @PatchMapping("/my")//id 값 바꿔주기
+    public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,Principal principal){//회원정보가 수정되었습니다.
+        userService.edit(principal, userEdit);
         return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
 
     }
 
-    @DeleteMapping("/my/{userId}") // 회원탈퇴 되었습니다.
-    public ResponseEntity<Object> userDelete(@PathVariable Long userId){//그냥 삭제해주면 될듯
-        userService.deleteUser(userId);
+    @DeleteMapping("/my") // 회원탈퇴 되었습니다.
+    public ResponseEntity<Object> userDelete(Principal principal){//그냥 삭제해주면 될듯
+        userService.deleteUser(principal);
         return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
 
     }
     
     //누르면 회원정보를 보게하는 것
-    @GetMapping("/profile/{userId}")
-    public UserProfile profileFind(@PathVariable Long userId){
-        return userService.viewUser(userId);
+    @GetMapping("/profile")
+    public UserProfile profileFind(Principal principal){
+        return userService.viewUser(principal);
     }
 }

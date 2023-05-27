@@ -1,4 +1,4 @@
-package com.linked.matched.service.user;
+package com.linked.matched.config.jwt;
 
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.UserNotFound;

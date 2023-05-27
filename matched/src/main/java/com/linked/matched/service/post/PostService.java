@@ -3,23 +3,25 @@ package com.linked.matched.service.post;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface PostService {
 
     List<PostResponse> getList(String boardName, PostSearch postSearch);
 
-    PostResponse findPost(Long postId);
+    PostOneResponse findPost(Long postId);
 
-    void write(PostCreate postCreate);
+    void write(PostCreate postCreate,Principal principal);
 
-    void edit(Long postId, PostEdit postEdit);
+    Boolean edit(Long postId, PostEdit postEdit, Principal principal);
 
-    void delete(Long postId);
+    Boolean delete(Long postId, Principal principal);
 
-    List<PostResponse> findPostUser(Long userId);
+    List<PostResponse> findPostUser(Principal principal);
 
     List<PostResponse> searchPost(String boardName,String keyword, PostSearch postSearch);
 

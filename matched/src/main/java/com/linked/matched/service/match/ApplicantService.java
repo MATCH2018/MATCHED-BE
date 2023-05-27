@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -26,8 +27,8 @@ public class ApplicantService {
     private final PostRepository postRepository;
 
     @Transactional
-    public void applyPost(Long userId,Long postId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
+    public void applyPost(Long postId, Principal principal){
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -42,8 +43,8 @@ public class ApplicantService {
     }
 
     @Transactional
-    public void cancelApply(Long userId,Long postId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound());
+    public void cancelApply(Long postId, Principal principal){
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -72,4 +73,16 @@ public class ApplicantService {
     }
     //1번 userid를 가지고 postlist를 가지고온다.
     //2번 postId를 선택하면 applicantuserlist를 준다.
+
+    @Transactional
+    public void cancelMatch(Long applicantId,Long postId){
+        User user = userRepository.findById(applicantId).orElseThrow(() -> new UserNotFound());
+
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
+
+        Applicant applicant = applicantRepository.findByUserAndPost(user, post).orElseThrow(() -> new NotApplicant());
+
+        applicantRepository.delete(applicant);
+
+    }
 }
