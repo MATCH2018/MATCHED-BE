@@ -47,12 +47,12 @@ public class SecurityConfig {
         // 요청 시 오는 HTTP Method허용(*은 모두 허용)
         configuration.addAllowedMethod("*");
         // 헤더 허용(*은 모두 허용)
-        configuration.addAllowedHeader("*");
+        configuration.addAllowedHeader("Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
         configuration.setAllowCredentials(true);
 
-//        configuration.addExposedHeader("Authorization");
-//        configuration.addExposedHeader("Refresh-Token");
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Refresh-Token");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -81,16 +81,18 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                
+
                 //HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
 
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/join").permitAll()
-//                .antMatchers("/email").permitAll()
-//                .anyRequest().authenticated()//나머지 request는 인증이 필요하다고 설정하는것
+
+                .antMatchers("/login").permitAll()
+                .antMatchers("/join").permitAll()
+                .antMatchers("/email").permitAll()
+                .antMatchers("/password_change").permitAll()
+                .anyRequest().authenticated()//나머지 request는 인증이 필요하다고 설정하는것
 
                 //JwtSecurityConfig 설정
                 .and()

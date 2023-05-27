@@ -3,6 +3,7 @@ package com.linked.matched.service.post;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 
 import java.security.Principal;
@@ -12,7 +13,7 @@ public interface PostService {
 
     List<PostResponse> getList(String boardName, PostSearch postSearch);
 
-    PostResponse findPost(Long postId);
+    PostOneResponse findPost(Long postId);
 
     void write(PostCreate postCreate,Principal principal);
 

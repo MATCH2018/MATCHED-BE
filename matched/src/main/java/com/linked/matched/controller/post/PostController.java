@@ -4,6 +4,7 @@ import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.ResponseDto;
+import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class PostController {
     }
 
     @GetMapping("/board/{boardName}/{postId}")
-    public PostResponse viewPost(@PathVariable String boardName,@PathVariable Long postId){
+    public PostOneResponse viewPost(@PathVariable String boardName, @PathVariable Long postId){
         return postService.findPost(postId);
     }
 
@@ -49,7 +50,7 @@ public class PostController {
         if(postService.edit(postId, postEdit,principal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.OK);
     }
 
     @DeleteMapping("/board/{boardName}/{postId}") // 게시글이 삭제 되었습니다.
@@ -57,7 +58,7 @@ public class PostController {
         if(postService.delete(postId,principal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);
     }
     
     //카테고리 넣는 검색

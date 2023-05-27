@@ -8,11 +8,8 @@ import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
-import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.*;
 import com.linked.matched.response.jwt.TokenDto;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.response.user.UserMail;
 import com.linked.matched.response.user.UserProfile;
 import lombok.RequiredArgsConstructor;
@@ -141,6 +138,20 @@ public class UserServiceImpl implements UserService{
         }
         //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
         String encode = passwordEncoder.encode(pwdEdit.getNewPassword());
+        user.passwordEdit(encode);
+    }
+
+    @Override
+    @Transactional
+    public void passwordChange(PwdChange pwdChange) {
+        User user = userRepository.findByLoginId(pwdChange.getLoginId()).orElseThrow(() -> new UserNotFound());
+        //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
+
+        if (!pwdChange.getNewPassword().equals(pwdChange.getCheckPassword())) {
+            throw new NotEqualPassword();
+        }
+
+        String encode = passwordEncoder.encode(pwdChange.getNewPassword());
         user.passwordEdit(encode);
     }
 

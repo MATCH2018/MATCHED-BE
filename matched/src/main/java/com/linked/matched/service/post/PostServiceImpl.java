@@ -10,6 +10,7 @@ import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
+import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,10 +37,10 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
-    public PostResponse findPost(Long postId) {
+    public PostOneResponse findPost(Long postId) {
         //목록중 내가 원하는 정보찾기
         //return 값 줘야한다. - querydsl 사용해야한다. 바뀔수 있다. 분류를 먼저하고 다시 찾을 수 있다.
-        return postRepository.findById(postId).map(PostResponse::new).orElseThrow(PostNotFound::new);
+        return postRepository.getPostAndUser(postId);
     }
 
     public void write(PostCreate postCreate,Principal principal) {
