@@ -41,6 +41,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notice> notices = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Applicant> applicants = new ArrayList<>();
+
     @Builder
     public User(Long userId, String loginId, String password, String name, String department, Integer gradle, LocalDate birth, String sex, String authorityName) {
         this.userId = userId;

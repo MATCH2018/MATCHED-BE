@@ -19,12 +19,14 @@ public class EmailServiceImpl implements EmailService{
 
     private final JavaMailSender emailSender;
 
-    public static final String ePw = createKey();
+    public String ePw;// = createKey();
+
 
     @Value("${AdminMail.id}")
     private String id;
 
     private MimeMessage createMessage(String to)throws Exception{
+        createKey();
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ePw);
         MimeMessage message = emailSender.createMimeMessage();
@@ -52,9 +54,10 @@ public class EmailServiceImpl implements EmailService{
         return message;
     }
 
-    public static String createKey() {
+    public void createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
+        int randomNum = rnd.nextInt(1000);
 
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
             int index = rnd.nextInt(3); // 0~2 까지 랜덤
@@ -74,7 +77,7 @@ public class EmailServiceImpl implements EmailService{
                     break;
             }
         }
-        return key.toString();
+        ePw= key.toString();
     }
     @Override
     public String sendSimpleMessage(UserEmail to) {

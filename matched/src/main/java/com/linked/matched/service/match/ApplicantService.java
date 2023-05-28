@@ -36,10 +36,11 @@ public class ApplicantService {
             throw new AlreadyApplicant();
         }
 
-        Applicant.builder()
+        Applicant applicant = Applicant.builder()
                 .user(user)
                 .post(post)
                 .build();
+        applicantRepository.save(applicant);
     }
 
     @Transactional

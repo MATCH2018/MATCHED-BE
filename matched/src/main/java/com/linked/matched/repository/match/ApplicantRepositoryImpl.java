@@ -23,10 +23,10 @@ public class ApplicantRepositoryImpl implements ApplicantRepositoryCustom{
 
     @Override
     public List<SelectUser> getUserList(Post post) {
-
+        //나중에 최적화해야한다.
         return jpaQueryFactory.select(Projections.constructor(SelectUser.class,user.userId,user.name))
                 .from(applicant)
-                .join(applicant.user ,user).fetchJoin()
+                .join(applicant.user ,user)
                 .where(applicant.post.eq(post))
                 .fetch();
     }
