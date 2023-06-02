@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostService {
 
-    List<PostResponse> getList(String boardName, PostSearch postSearch);
+    List<PostResponse> getList(String boardName, Integer page);
 
     PostOneResponse findPost(Long postId);
 

@@ -17,9 +17,10 @@ public class ApplicantController {
 
     @PostMapping("/match/{postId}") // 매칭 지원이 되었습니다.
     public ResponseEntity<Object> apply(@PathVariable Long postId, Principal principal){
-        applicantService.applyPost(postId,principal);
-        return new ResponseEntity<>(new ResponseDto("매칭 지원이 되었습니다."), HttpStatus.OK);
-
+        if(applicantService.applyPost(postId,principal)) {
+            return new ResponseEntity<>(new ResponseDto("매칭 지원이 되었습니다."), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("이미 지원이 되었습니다."), HttpStatus.CONFLICT);
     }
 
     @DeleteMapping("/match/{postId}") // 매칭 지원을 취소 했습니다.

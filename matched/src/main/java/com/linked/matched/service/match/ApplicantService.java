@@ -27,19 +27,21 @@ public class ApplicantService {
     private final PostRepository postRepository;
 
     @Transactional
-    public void applyPost(Long postId, Principal principal){
+    public boolean applyPost(Long postId, Principal principal){
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
         if(applicantRepository.findByUserAndPost(user,post).isPresent()){
-            throw new AlreadyApplicant();
+            return false;
         }
 
-        Applicant.builder()
+        Applicant applicant = Applicant.builder()
                 .user(user)
                 .post(post)
                 .build();
+        applicantRepository.save(applicant);
+        return true;
     }
 
     @Transactional

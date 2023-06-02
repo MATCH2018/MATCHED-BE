@@ -64,8 +64,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     @Override
     public PostOneResponse getPostAndUser(Long postId) {
 
-
-
         return jpaQueryFactory.select(Projections
                         .constructor(PostOneResponse.class,post.title,post.content,post.createdAt,post.limitPeople,post.boardName,user.userId,user.name,user.department))
                 .from(post)

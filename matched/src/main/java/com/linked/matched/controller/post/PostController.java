@@ -8,11 +8,11 @@ import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.List;
 
@@ -22,14 +22,20 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/")
+    public ResponseEntity<HttpStatus> healthCheck(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @GetMapping("/home")
     public List<PostResponse> webHome(){
         return postService.homeList();
     }
 
     @GetMapping("/board/{boardName}")//RequestBody이 아니라 ModelAttribute로 넣어야한다.
-    public List<PostResponse> viewList(@PathVariable String boardName,@ModelAttribute PostSearch postSearch){
-        return postService.getList(boardName,postSearch);
+    public List<PostResponse> viewList(@PathVariable String boardName,@PathParam(value = "page") Long page){
+        return postService.getList(boardName, Math.toIntExact(page));
     }
 
     @PostMapping("/board/{boardName}") //게시글 작성이 되었습니다.

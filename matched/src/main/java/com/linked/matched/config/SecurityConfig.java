@@ -87,7 +87,7 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .antMatchers("/**").permitAll()
 
-
+                .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/join").permitAll()
                 .antMatchers("/email").permitAll()

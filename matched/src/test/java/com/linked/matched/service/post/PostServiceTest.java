@@ -214,7 +214,7 @@ class PostServiceTest {
                 .build();
 
         //when
-        List<PostResponse> clubList = postService.getList("club",page);
+        List<PostResponse> clubList = postService.getList("club",1);
 
         Assertions.assertEquals(clubList.size(),2);
         Assertions.assertEquals(clubList.get(0).getTitle(),"제목임다2.");
