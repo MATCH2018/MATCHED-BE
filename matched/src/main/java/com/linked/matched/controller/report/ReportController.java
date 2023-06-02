@@ -27,7 +27,7 @@ public class ReportController {
 
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK) //삭제하고
     @PostMapping("/reports/boards") // 신고가 완료 되었습니다.
     public ResponseEntity<Object> reportBoard(@RequestBody PostReportRequest boardReportRequest){
         reportService.reportBoard(boardReportRequest);

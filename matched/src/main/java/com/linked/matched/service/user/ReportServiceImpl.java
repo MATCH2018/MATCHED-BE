@@ -50,7 +50,7 @@ public class ReportServiceImpl implements ReportService{
                     .build();
             userReportRepository.save(userReport);
 
-            if(userReportRepository.findByReporterUserId(req.getReportUserId()).size() >= 10) {
+            if(userReportRepository.findByReporterUserId(req.getReportUserId()).size() >= 3) {
                 // 신고 수 10 이상일 시 true 설정
                 reportedUser.makeStatusReported();
             }

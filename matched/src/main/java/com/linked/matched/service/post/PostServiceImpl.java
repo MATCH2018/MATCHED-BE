@@ -27,9 +27,11 @@ public class PostServiceImpl implements PostService{
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public List<PostResponse> getList(String boardName, PostSearch postSearch) {
+    public List<PostResponse> getList(String boardName, Integer page) {
         //일단 넣어주야하는 값들이 이름을 넣어주면 그 이름에 대한 list값을 준다.
         //return 값 줘야한다.-querydsl 사용해야한다.??? 그냥 값을 넣어주고 뽑는다?
+
+        PostSearch postSearch=new PostSearch(page);
 
         //dto로 변경시켜서 사용하기?
         return postRepository.getList(BoardStatus.valueOf(boardName),postSearch).stream()

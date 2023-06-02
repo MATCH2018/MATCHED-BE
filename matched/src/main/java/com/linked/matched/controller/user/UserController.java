@@ -49,8 +49,8 @@ public class UserController {
         return new ResponseEntity<>(new ResponseDto("명지대 이메일을 이용해주세요"), HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/email")
-    public String userEmail(@RequestParam("email") UserEmail email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
+    @PostMapping("/email")
+    public String userEmail(@RequestBody UserEmail email) throws Exception {//이메일값 주기 -0 이메일을 주면 특정 값을 줌 그 값으 얻으면 회원가입가능
 
         if(email.isValid()) {
             return emailService.sendSimpleMessage(email);
