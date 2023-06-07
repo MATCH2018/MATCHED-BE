@@ -72,4 +72,6 @@ public class PostController {
     public List<PostResponse> searchPost(@PathVariable String boardName,@RequestParam String keyword,@ModelAttribute PostSearch postSearch){
         return postService.searchPost(boardName,keyword,postSearch);
     }
+
+
 }

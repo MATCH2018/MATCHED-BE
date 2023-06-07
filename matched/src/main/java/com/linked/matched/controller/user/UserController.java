@@ -92,4 +92,5 @@ public class UserController {
     public UserProfile profileFind(Principal principal){
         return userService.viewUser(principal);
     }
+
 }
