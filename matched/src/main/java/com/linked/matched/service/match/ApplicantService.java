@@ -10,6 +10,7 @@ import com.linked.matched.exception.UserNotFound;
 import com.linked.matched.repository.match.ApplicantRepository;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.user.UserRepository;
+import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.response.user.SelectUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,13 @@ public class ApplicantService {
         Applicant applicant = applicantRepository.findByUserAndPost(user, post).orElseThrow(() -> new NotApplicant());
 
         applicantRepository.delete(applicant);
+
+    }
+
+    public List<PostResponse> applicantPosts(Principal principal) {
+        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+
+        return applicantRepository.getApplicantPosts(user);
 
     }
 }
