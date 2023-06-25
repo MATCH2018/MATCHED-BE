@@ -20,15 +20,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/reports/users") // 신고가 완료 되었습니다.
-    public ResponseEntity<Object> reportUser(@RequestBody UserReportRequest userReportRequest) {
-        reportService.reportUser(userReportRequest);
-        return new ResponseEntity<>(new ResponseDto("신고가 완료 되었습니다."), HttpStatus.OK);
-
-    }
-
-    @ResponseStatus(HttpStatus.OK) //삭제하고
-    @PostMapping("/reports/boards") // 신고가 완료 되었습니다.
+    @PostMapping("/reports/boards") // 게시글 신고
     public ResponseEntity<Object> reportBoard(@RequestBody PostReportRequest boardReportRequest){
         reportService.reportBoard(boardReportRequest);
         return new ResponseEntity<>(new ResponseDto("신고가 완료 되었습니다."), HttpStatus.OK);

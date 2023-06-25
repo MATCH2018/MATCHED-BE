@@ -1,7 +1,7 @@
 package com.linked.matched.config.jwt;
 
 import com.linked.matched.entity.User;
-import com.linked.matched.exception.UserNotFound;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

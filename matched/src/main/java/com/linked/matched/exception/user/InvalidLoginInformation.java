@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class InvalidLoginInformation extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class InvalidLoginInformation extends MatchException {
 
     private static final String MESSAGE = "아이디/비밀번호가 올바르지 않습니다.";
 

@@ -7,10 +7,7 @@ import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -31,7 +28,7 @@ class NoticeServiceImplTest {
     @Autowired
     private UserRepository userRepository;
 
-    @BeforeEach
+    @AfterEach
     void clean(){
         noticeRepository.deleteAll();
         userRepository.deleteAll();
@@ -72,7 +69,7 @@ class NoticeServiceImplTest {
         noticeRepository.save(notice1);
         noticeRepository.save(notice2);
 
-        NoticeResponse notice = noticeService.findNotice(2L);
+        NoticeResponse notice = noticeService.findNotice(notice2.getNoticeId());
 
         Assertions.assertEquals(notice.getTitle(),"제목2");
         Assertions.assertEquals(notice.getContent(),"내용2");
@@ -87,7 +84,7 @@ class NoticeServiceImplTest {
                 .build();
         noticeRepository.save(notice);
 
-        noticeService.deleteNotice(1L);
+        noticeService.deleteNotice(notice.getNoticeId());
 
         Assertions.assertEquals(noticeRepository.count(),0);
     }

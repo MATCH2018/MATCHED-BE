@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.email;
 
-public class EmailSendFail extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class EmailSendFail extends MatchException {
 
     private static final String MESSAGE = "이메일을 보내는데 실패했습니다.";
 

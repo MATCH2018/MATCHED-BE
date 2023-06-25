@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class AuthenticationFail extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class AuthenticationFail extends MatchException {
 
     private static final String MESSAGE = "인증에 실패 했습니다.";
 

@@ -1,4 +1,6 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.report;
+
+import com.linked.matched.exception.MatchException;
 
 public class NotSelfReport extends MatchException {
 

@@ -1,7 +1,9 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.post;
 
 
-public class PostNotFound extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class PostNotFound extends MatchException {
 
     private static final String MESSAGE= "존재하지 않는 글입니다.";
 

@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class NotSecurityContext extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class NotSecurityContext extends MatchException {
 
     private static final String MESSAGE= "Security Context 에 인자 정보가 없습니다.";
 

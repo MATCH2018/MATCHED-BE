@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class LogoutStatus extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class LogoutStatus extends MatchException {
 
     private static final String MESSAGE = "로그아웃 된 상태입니다.";
 

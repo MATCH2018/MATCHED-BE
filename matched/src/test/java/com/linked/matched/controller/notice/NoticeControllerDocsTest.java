@@ -52,7 +52,7 @@ public class NoticeControllerDocsTest {
         noticeRepository.deleteAll();
     }
 
-    //@Test
+    @Test
     @DisplayName("공지 저장")
     @WithMockUser
     void test1() throws Exception {

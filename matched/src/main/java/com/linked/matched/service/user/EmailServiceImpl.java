@@ -1,6 +1,6 @@
 package com.linked.matched.service.user;
 
-import com.linked.matched.exception.EmailSendFail;
+import com.linked.matched.exception.email.EmailSendFail;
 import com.linked.matched.request.user.UserEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

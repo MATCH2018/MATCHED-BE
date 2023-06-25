@@ -2,8 +2,8 @@ package com.linked.matched.service.notice;
 
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
-import com.linked.matched.exception.PostNotFound;
-import com.linked.matched.exception.UserNotFound;
+import com.linked.matched.exception.post.PostNotFound;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
