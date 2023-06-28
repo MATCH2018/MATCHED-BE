@@ -41,7 +41,7 @@ class NoticeControllerTest {
         noticeRepository.deleteAll();
     }
 
-   // @Test
+    @Test
     @DisplayName("공지 생성")
     void test1() throws Exception {
 

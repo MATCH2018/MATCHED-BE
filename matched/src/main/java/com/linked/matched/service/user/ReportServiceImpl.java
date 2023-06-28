@@ -36,16 +36,16 @@ public class ReportServiceImpl implements ReportService{
             throw new NotSelfReport();
         }
 
-        if(postReportRepository.findByReportPostId(reportedPost.getPostId()) == null) {
+        if(postReportRepository.findByPost(reportedPost) == null) {
             // 신고 한 적이 없다면, 테이블 생성 후 신고 처리
             PostReport postReport = PostReport.builder()
                     .reporterId(reporter.getUserId())
-                    .reportPostId(reportedPost.getPostId())
+                    .post(reportedPost)
                     .content(req.getContent())
                     .build();
             postReportRepository.save(postReport);
 
-            if(postReportRepository.findByReportPostId(req.getReportedPostId()).size() >= 10) {
+            if(postReportRepository.findByPost(reportedPost).size() >= 10) {
                 // 신고 수 10 이상일 시 true 설정
                 reportedPost.makeStatusReported();
             }

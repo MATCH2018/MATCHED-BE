@@ -35,10 +35,11 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Applicant> applicants = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostReport> postReports = new ArrayList<>();
 
     @Builder
     public Post(Long postId, String title, String content, Integer limitPeople, BoardStatus boardName,User user) {
