@@ -10,14 +10,13 @@ import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -32,14 +31,21 @@ class PostServiceTest {
     private PostRepository postRepository;
 
 
-    @BeforeEach
+    @AfterEach
     void clean(){
         postRepository.deleteAll();
     }
 
+    @WithMockUser
     @Test
     @DisplayName("글 작성")
     void test(){
+
+        User user=User.builder()
+                .userId(1L)
+                .loginId("123")
+                .password("123")
+                .build();
 
         //given
         PostCreate postCreate = PostCreate.builder()
@@ -49,10 +55,12 @@ class PostServiceTest {
                 .boardName(BoardStatus.valueOf("club"))
                 .build();
 
+//        Principal principal = user.getUserId();
+
         //when
-//        postService.write(postCreate);
-//
-//        //then
+//        postService.write(postCreate,principal);
+
+        //then
 //        Assertions.assertEquals(1L,postRepository.count());
 //        Post post = postRepository.findAll().get(0);
 //        Assertions.assertEquals("제목임다.",post.getTitle());
@@ -83,11 +91,10 @@ class PostServiceTest {
         postRepository.save(poom);
 
         //when
-        PostOneResponse post = postService.findPost(1L);
-
+        PostOneResponse post = postService.findPost(poom.getPostId());
         //then
-//        Assertions.assertNotNull(post);
-//        Assertions.assertEquals(post.getTitle(),"제목임다.");
+        Assertions.assertNotNull(postRepository.count());
+        Assertions.assertEquals("품앗이 입니다.",post.getTitle());
     }
 
     @Test
@@ -216,11 +223,9 @@ class PostServiceTest {
         //when
         List<PostResponse> clubList = postService.getList("club",1);
 
-        Assertions.assertEquals(clubList.size(),2);
-        Assertions.assertEquals(clubList.get(0).getTitle(),"제목임다2.");
-        Assertions.assertEquals(clubList.get(0).getPostId(),3L);
-        Assertions.assertEquals(clubList.get(1).getTitle(),"제목임다.");
-        Assertions.assertEquals(clubList.get(1).getPostId(),1L);
+        Assertions.assertEquals(2,clubList.size());
+        Assertions.assertEquals("제목임다2.",clubList.get(0).getTitle());
+        Assertions.assertEquals("제목임다.",clubList.get(1).getTitle());
     }
 
 

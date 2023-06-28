@@ -3,7 +3,8 @@ package com.linked.matched.service.user;
 import com.linked.matched.config.jwt.TokenProvider;
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
-import com.linked.matched.exception.*;
+import com.linked.matched.exception.email.AlreadyExistsEmailException;
+import com.linked.matched.exception.user.*;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void edit(Principal principal, UserEdit userEdit) {
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
-        //build를 다시해야한다. 어노테이션이 아니라 내가 build를 열어서 수정해야한다.
+
         user.edit(userEdit);
     }
 
@@ -136,7 +136,6 @@ public class UserServiceImpl implements UserService{
         if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
         }
-        //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
         String encode = passwordEncoder.encode(pwdEdit.getNewPassword());
         user.passwordEdit(encode);
     }
@@ -145,7 +144,6 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void passwordChange(PwdChange pwdChange) {
         User user = userRepository.findByLoginId(pwdChange.getLoginId()).orElseThrow(() -> new UserNotFound());
-        //회원 암호화를 해주고 넘겨야한다. -암호화를 안해주었다.
 
         if (!pwdChange.getNewPassword().equals(pwdChange.getCheckPassword())) {
             throw new NotEqualPassword();

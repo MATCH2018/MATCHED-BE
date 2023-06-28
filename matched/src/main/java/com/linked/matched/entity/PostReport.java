@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
@@ -17,15 +15,17 @@ public class PostReport {
 
     private Long reporterId;
 
-    private Long reportPostId;
-
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @Builder
-    public PostReport(Long id, Long reporterId, Long reportPostId, String content) {
+    public PostReport(Long id, Long reporterId, String content, Post post) {
         this.id = id;
         this.reporterId = reporterId;
-        this.reportPostId = reportPostId;
         this.content = content;
+        this.post = post;
     }
 }

@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class NotEqualPassword extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class NotEqualPassword extends MatchException {
 
     private static final String MESSAGE= "비밀번호가 일치하지 않습니다.";
 

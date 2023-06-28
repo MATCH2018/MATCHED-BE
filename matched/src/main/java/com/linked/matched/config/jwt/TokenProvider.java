@@ -1,6 +1,6 @@
 package com.linked.matched.config.jwt;
 
-import com.linked.matched.exception.AuthenticationFail;
+import com.linked.matched.exception.user.AuthenticationFail;
 import com.linked.matched.response.jwt.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;

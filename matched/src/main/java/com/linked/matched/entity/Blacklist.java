@@ -15,4 +15,5 @@ public class Blacklist {
     @Column
     private String email;
 
+    //연동 해야한다.
 }

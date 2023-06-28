@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -44,6 +45,7 @@ class PostControllerTest {
     }
 
     @Test
+    @WithMockUser
     @DisplayName("글 목록 조회")
     void test1() throws Exception {
 
@@ -86,11 +88,21 @@ class PostControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-  //  @Test
+    @Test
     @DisplayName("글 저장")
+    @WithMockUser
     void test2() throws Exception {
+        //유저를 저장시켜야한다.
+        User user = User.builder()
+                .loginId("asd@mju.ac.kr")
+                .password("5678")
+                .name("이씨")
+                .department("컴퓨터공학과")
+                .gradle(4)
+                .sex("여성")
+                .build();
 
-
+        userRepository.save(user);
 
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -99,14 +111,13 @@ class PostControllerTest {
                 .boardName(BoardStatus.valueOf("club"))
                 .build();
 
-
-
         String json = objectMapper.writeValueAsString(request);
 
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/board/{boardName}", request.getBoardName())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .content(String.valueOf(user)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
@@ -117,7 +128,8 @@ class PostControllerTest {
         Assertions.assertEquals(next.getTitle(), "제목입니다.");
     }
 
-  //  @Test
+    @Test
+    @WithMockUser
     @DisplayName("글 수정")
     void test3() throws Exception {
         Post request = Post.builder()
@@ -147,7 +159,8 @@ class PostControllerTest {
 
     }
 
- //   @Test
+    @Test
+    @WithMockUser
     @DisplayName("글 삭제")
     void test4() throws Exception {
         Post request = Post.builder()
@@ -170,6 +183,7 @@ class PostControllerTest {
         Assertions.assertEquals(postRepository.count(),0);
     }
     @Test
+    @WithMockUser
     @DisplayName("글 1개 조회")
     void test5() throws Exception {
         Post request = Post.builder()

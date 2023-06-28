@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class Unauthorized extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class Unauthorized extends MatchException {
 
     private static final String MESSAGE = "인증이 필요합니다.";
 

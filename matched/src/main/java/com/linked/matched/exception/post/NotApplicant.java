@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.post;
 
-public class NotApplicant extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class NotApplicant extends MatchException {
 
     private static final String MESSAGE = "지원한 게시글이 아닙니다.";
 

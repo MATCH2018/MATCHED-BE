@@ -25,19 +25,18 @@ public class MatchController {
     private final UserService userService;
     private final PostService postService;
     private final ApplicantService applicantService;
-
-    //내 글 가지고 오기
-    @GetMapping("/match")
+    
+    @GetMapping("/match") //내 게시글 목록 조회
     public List<PostResponse> postList(Principal principal){//list로 받는데 querydsl을 사용해야한다.
        return postService.findPostUser(principal);
     }
 
-    @GetMapping("/match/my/{postId}")
+    @GetMapping("/match/my/{postId}") //내 게시글 자세히 조회
     public PostOneResponse viewPost(@PathVariable Long postId){
         return postService.findPost(postId);
     }
 
-    @PatchMapping("/match/my/{postId}")
+    @PatchMapping("/match/my/{postId}") //내 게시글 수정
     public ResponseEntity<Object> patchMatchPost(@PathVariable Long postId,@RequestBody PostEdit postEdit, Principal principal){
         if(postService.edit(postId, postEdit,principal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
@@ -45,7 +44,7 @@ public class MatchController {
         return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.OK);
     }
 
-    @DeleteMapping("/match/my/{postId}")
+    @DeleteMapping("/match/my/{postId}")// 내 게시글 삭제
     public ResponseEntity<Object> deleteMatchPost(@PathVariable Long postId, Principal principal)  {
         if(postService.delete(postId,principal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
@@ -53,14 +52,12 @@ public class MatchController {
         return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);
     }
 
-    //내 게시글 매칭 현황
-    @GetMapping("/match/{postId}")
+    @GetMapping("/match/{postId}")// 내 게시글 매칭 지원 현황(게시글 작성자 입장)
     public List<SelectUser> postUser(@PathVariable Long postId){
         return applicantService.findUserAndPost(postId);
     }
 
-
-    @PostMapping("/{postId}/accept/{applicantId}") //이 userId는 상대 userId이다.
+    @PostMapping("/{postId}/accept/{applicantId}") //회원 매칭 수락(게시글 작성자 입장)
     public UserMail acceptUser(@PathVariable Long applicantId,@PathVariable Long postId){//학교 이메일을 준다.
         if(applicantService.check(applicantId,postId)){
             UserMail userEmail = userService.findUserEmail(applicantId);
@@ -70,9 +67,8 @@ public class MatchController {
         }
         return null;
     }
-    
-    //매칭 취소 시키기
-    @PostMapping("/{postId}/refuse/{applicantId}")//매칭을 거부햇다는 메시지를 남겨야한다.
+
+    @PostMapping("/{postId}/refuse/{applicantId}")//회원 매칭 거부(게시글 작성자 입장)
     public ResponseEntity<Object> refuseUser(@PathVariable Long postId, @PathVariable Long applicantId){
         if(applicantService.check(applicantId,postId)){
             applicantService.cancelMatch(applicantId, postId);

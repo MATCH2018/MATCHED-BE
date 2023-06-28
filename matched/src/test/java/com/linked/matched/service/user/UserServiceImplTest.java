@@ -10,10 +10,7 @@ import com.linked.matched.request.user.UserEdit;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +32,7 @@ class UserServiceImplTest {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @BeforeEach
+    @AfterEach
     void clean(){
         userRepository.deleteAll();
         refreshTokenRepository.deleteAll();

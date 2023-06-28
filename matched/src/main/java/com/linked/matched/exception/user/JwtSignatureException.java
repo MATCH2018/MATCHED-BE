@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class JwtSignatureException extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class JwtSignatureException extends MatchException {
 
     private static final String MESSAGE = "잘못된 JWT 서명입니다.";
 

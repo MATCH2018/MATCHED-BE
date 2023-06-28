@@ -3,8 +3,8 @@ package com.linked.matched.service.post;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
-import com.linked.matched.exception.PostNotFound;
-import com.linked.matched.exception.UserNotFound;
+import com.linked.matched.exception.post.PostNotFound;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
@@ -28,20 +28,14 @@ public class PostServiceImpl implements PostService{
     private final UserRepository userRepository;
 
     public List<PostResponse> getList(String boardName, Integer page) {
-        //일단 넣어주야하는 값들이 이름을 넣어주면 그 이름에 대한 list값을 준다.
-        //return 값 줘야한다.-querydsl 사용해야한다.??? 그냥 값을 넣어주고 뽑는다?
-
         PostSearch postSearch=new PostSearch(page);
 
-        //dto로 변경시켜서 사용하기?
         return postRepository.getList(BoardStatus.valueOf(boardName),postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
 
     public PostOneResponse findPost(Long postId) {
-        //목록중 내가 원하는 정보찾기
-        //return 값 줘야한다. - querydsl 사용해야한다. 바뀔수 있다. 분류를 먼저하고 다시 찾을 수 있다.
         return postRepository.getPostAndUser(postId);
     }
 
@@ -63,7 +57,6 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public Boolean edit(Long postId, PostEdit postEdit, Principal principal) {
         //게시글 정정
-        //리턴 값 필요 없음?-그냥 기본으로 할까? 흠.....
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);

@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
 
-    //getList해서 페이징 처리를 해서 받는 값을 처리해야한다.
     List<Post> getList(BoardStatus boardStatus, PostSearch postSearch);
 
     List<Post> findAllKeywordOrderByCreatedAt(BoardStatus boardStatus,String keyword, PostSearch postSearch);

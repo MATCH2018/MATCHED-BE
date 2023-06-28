@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.report;
 
-public class AlreadyReport extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class AlreadyReport extends MatchException {
     private static final String MESSAGE= "이미 신고를 했습니다.";
 
     public AlreadyReport() {

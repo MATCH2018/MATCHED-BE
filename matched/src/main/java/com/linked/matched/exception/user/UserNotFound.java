@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class UserNotFound extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class UserNotFound extends MatchException {
 
     private static final String MESSAGE = "일치하는 유저가 없습니다.";
 

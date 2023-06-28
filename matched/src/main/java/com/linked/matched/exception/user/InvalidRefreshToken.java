@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class InvalidRefreshToken extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class InvalidRefreshToken extends MatchException {
 
 
     private static final String MESSAGE = "refreshToken이 유효하지 않습니다.";

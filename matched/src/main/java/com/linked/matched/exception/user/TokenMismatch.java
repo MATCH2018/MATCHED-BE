@@ -1,6 +1,8 @@
-package com.linked.matched.exception;
+package com.linked.matched.exception.user;
 
-public class TokenMismatch extends MatchException{
+import com.linked.matched.exception.MatchException;
+
+public class TokenMismatch extends MatchException {
 
     private static final String MESSAGE = "토큰의 정보가 일치하지 않습니다.";
 
