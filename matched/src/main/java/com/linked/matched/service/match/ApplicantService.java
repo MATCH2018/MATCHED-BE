@@ -60,7 +60,7 @@ public class ApplicantService {
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
-        return applicantRepository.getUserList(post);
+        return applicantRepository.getUserList(post);//#TODO querydsl에서 문제발생
 
     }
 
@@ -88,10 +88,13 @@ public class ApplicantService {
 
     }
 
+    @Transactional
     public List<PostResponse> applicantPosts(Principal principal) {
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
 
-        return applicantRepository.getApplicantPosts(user);
+        return null;//TODO querydsl에 맞게 변경해서 n+1문제 해결할것
+        //        applicantRepository.getApplicantPosts(user);
+        
 
     }
 }

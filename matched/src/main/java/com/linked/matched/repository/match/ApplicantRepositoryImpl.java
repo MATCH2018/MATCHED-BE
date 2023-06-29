@@ -1,10 +1,7 @@
 package com.linked.matched.repository.match;
 
 import com.linked.matched.entity.Post;
-import com.linked.matched.entity.QApplicant;
-import com.linked.matched.entity.QUser;
 import com.linked.matched.entity.User;
-import com.linked.matched.response.post.PostResponse;
 import com.linked.matched.response.user.SelectUser;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
@@ -28,16 +25,16 @@ public class ApplicantRepositoryImpl implements ApplicantRepositoryCustom{
     public List<SelectUser> getUserList(Post post) {
         return jpaQueryFactory.select(Projections.constructor(SelectUser.class,user.userId,user.name))
                 .from(applicant)
-                .join(applicant.user ,user)
+                .leftJoin(applicant.user ,user).fetchJoin()
                 .where(applicant.post.eq(post))
                 .fetch();
     }
 
     @Override
-    public List<PostResponse> getApplicantPosts(User user) {
-        return jpaQueryFactory.select(Projections.constructor(PostResponse.class,post))
+    public List<Tuple> getApplicantPosts(User user) {
+        return jpaQueryFactory.select(post.postId,post.title, post.content,post.createdAt, post.limitPeople,post.boardName)
                 .from(applicant)
-                .join(applicant.post,post)
+                .leftJoin(applicant.post,post).fetchJoin()
                 .where(applicant.user.eq(user))
                 .fetch();
     }
