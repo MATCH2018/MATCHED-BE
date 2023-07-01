@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,9 @@ public class ApplicantService {
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
-        return applicantRepository.getUserList(post);//#TODO querydsl에서 문제발생
+        return userRepository.getUserList(post).stream()
+                .map(SelectUser::new).collect(Collectors.toList());//#TODO querydsl에서 문제발생
+//        return null;
 
     }
 
@@ -92,8 +95,10 @@ public class ApplicantService {
     public List<PostResponse> applicantPosts(Principal principal) {
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
 
-        return null;//TODO querydsl에 맞게 변경해서 n+1문제 해결할것
-        //        applicantRepository.getApplicantPosts(user);
+//        return null;//TODO querydsl에 맞게 변경해서 n+1문제 해결할것
+        return postRepository.getApplicantPosts(user).stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
         
 
     }

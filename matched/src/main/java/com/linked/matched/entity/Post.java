@@ -36,7 +36,7 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Applicant> applicants = new ArrayList<>();
+    private List<Applicant> applicant = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostReport> postReports = new ArrayList<>();

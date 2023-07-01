@@ -40,7 +40,7 @@ public class User {
     private List<Notice> notices = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Applicant> applicants = new LinkedHashSet<>();
+    private Set<Applicant> applicant = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
