@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Applicant> applicant = new ArrayList<>();
 

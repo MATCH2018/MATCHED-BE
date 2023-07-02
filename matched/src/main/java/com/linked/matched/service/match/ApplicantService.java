@@ -91,7 +91,6 @@ public class ApplicantService {
 
     }
 
-    @Transactional
     public List<PostResponse> applicantPosts(Principal principal) {
         User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
 
