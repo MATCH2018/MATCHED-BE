@@ -3,6 +3,7 @@ package com.linked.matched.repository.post;
 
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.QPost;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostOneResponse;
@@ -11,6 +12,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import static com.linked.matched.entity.QApplicant.applicant;
 import static com.linked.matched.entity.QPost.post;
 import static com.linked.matched.entity.QUser.*;
 
@@ -70,6 +72,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .join(post.user,user)
                 .where(post.postId.eq(postId))
                 .fetchOne();
+    }
+
+    @Override
+    public List<Post> getApplicantPosts(User user) {
+        return jpaQueryFactory.selectFrom(post)
+                .leftJoin(post.applicant,applicant)
+                .fetchJoin()
+                .where(applicant.user.eq(user))
+                .distinct()
+                .fetch();
     }
 
 

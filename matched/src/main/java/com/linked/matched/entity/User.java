@@ -6,13 +6,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,8 +40,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notice> notices = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Applicant> applicants = new ArrayList<>();
+    private Set<Applicant> applicant = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
