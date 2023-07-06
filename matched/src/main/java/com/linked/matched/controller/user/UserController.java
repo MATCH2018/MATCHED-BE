@@ -1,5 +1,6 @@
 package com.linked.matched.controller.user;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
 import com.linked.matched.request.user.*;
@@ -12,6 +13,7 @@ import com.linked.matched.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -65,8 +67,8 @@ public class UserController {
     }
 
     @PostMapping("/password_edit")//로그인 되었을때 비밀번호 변경
-    public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdEdit pwdEdit, Principal principal) {//비밀번호가 변경되었습니다.
-        userService.passwordEdit(principal,pwdEdit);
+    public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdEdit pwdEdit, @AuthenticationPrincipal UserPrincipal userPrincipal) {//비밀번호가 변경되었습니다.
+        userService.passwordEdit(userPrincipal,pwdEdit);
         return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
 
     }
@@ -79,22 +81,22 @@ public class UserController {
     }
 
     @PatchMapping("/my")//회원정보 수정
-    public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,Principal principal){//회원정보가 수정되었습니다.
-        userService.edit(principal, userEdit);
+    public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,@AuthenticationPrincipal UserPrincipal userPrincipal){//회원정보가 수정되었습니다.
+        userService.edit(userPrincipal, userEdit);
         return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
 
     }
 
     @DeleteMapping("/my") // 회원탈퇴 
-    public ResponseEntity<Object> userDelete(Principal principal){//그냥 삭제해주면 될듯
-        userService.deleteUser(principal);
+    public ResponseEntity<Object> userDelete(@AuthenticationPrincipal UserPrincipal userPrincipal){//그냥 삭제해주면 될듯
+        userService.deleteUser(userPrincipal);
         return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
 
     }
     
     @GetMapping("/profile")//회원정보 조회
-    public UserProfile profileFind(Principal principal){
-        return userService.viewUser(principal);
+    public UserProfile profileFind(UserPrincipal userPrincipal){
+        return userService.viewUser(userPrincipal);
     }
 
 }

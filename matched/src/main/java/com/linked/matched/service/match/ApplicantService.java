@@ -1,5 +1,6 @@
 package com.linked.matched.service.match;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Applicant;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
@@ -28,8 +29,8 @@ public class ApplicantService {
     private final PostRepository postRepository;
 
     @Transactional
-    public boolean applyPost(Long postId, Principal principal){
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
+    public boolean applyPost(Long postId, UserPrincipal userPrincipal){
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -46,8 +47,8 @@ public class ApplicantService {
     }
 
     @Transactional
-    public void cancelApply(Long postId, Principal principal){
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
+    public void cancelApply(Long postId, UserPrincipal userPrincipal){
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -62,8 +63,7 @@ public class ApplicantService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
         return userRepository.getUserList(post).stream()
-                .map(SelectUser::new).collect(Collectors.toList());//#TODO querydsl에서 문제발생
-//        return null;
+                .map(SelectUser::new).collect(Collectors.toList());
 
     }
 
@@ -76,8 +76,6 @@ public class ApplicantService {
 
         return true;
     }
-    //1번 userid를 가지고 postlist를 가지고온다.
-    //2번 postId를 선택하면 applicantuserlist를 준다.
 
     @Transactional
     public void cancelMatch(Long applicantId,Long postId){
@@ -91,14 +89,11 @@ public class ApplicantService {
 
     }
 
-    public List<PostResponse> applicantPosts(Principal principal) {
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+    public List<PostResponse> applicantPosts(UserPrincipal userPrincipal) {
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
 
-//        return null;//TODO querydsl에 맞게 변경해서 n+1문제 해결할것
         return postRepository.getApplicantPosts(user).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
-        
-
     }
 }

@@ -14,23 +14,14 @@ import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return userRepository.findByLoginId(username)
-                .map(this::createUserDetails)
+        User user = userRepository.findByLoginId(username)
                 .orElseThrow(UserNotFound::new);
-    }
-    private UserDetails createUserDetails(User user) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthorityName());
-
-        return new org.springframework.security.core.userdetails.User(
-                String.valueOf(user.getUserId()),
-                user.getPassword(),
-                Collections.singleton(grantedAuthority)
-        );
+        return new UserPrincipal(user);
     }
 }

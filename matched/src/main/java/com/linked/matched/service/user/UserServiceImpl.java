@@ -1,6 +1,7 @@
 package com.linked.matched.service.user;
 
 import com.linked.matched.config.jwt.TokenProvider;
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.email.AlreadyExistsEmailException;
@@ -114,24 +115,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteUser(Principal principal) {
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+    public void deleteUser(UserPrincipal userPrincipal) {
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
 
         userRepository.delete(user);
     }
 
     @Override
     @Transactional
-    public void edit(Principal principal, UserEdit userEdit) {
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+    public void edit(UserPrincipal userPrincipal, UserEdit userEdit) {
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
 
         user.edit(userEdit);
     }
 
     @Override
     @Transactional
-    public void passwordEdit(Principal principal, PwdEdit pwdEdit) {
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+    public void passwordEdit(UserPrincipal userPrincipal, PwdEdit pwdEdit) {
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
@@ -159,8 +160,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserProfile viewUser(Principal principal) {
-        return userRepository.findById(Long.valueOf(principal.getName()))
+    public UserProfile viewUser(UserPrincipal userPrincipal) {
+        return userRepository.findById(Long.valueOf(userPrincipal.getUserId()))
                 .map(UserProfile::new)
                 .orElseThrow(() -> new UserNotFound());
     }

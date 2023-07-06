@@ -1,5 +1,6 @@
 package com.linked.matched.service.notice;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.post.PostNotFound;
@@ -39,9 +40,9 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void writeNotice(NoticeCreate noticeCreate, Principal principal){
+    public void writeNotice(NoticeCreate noticeCreate, UserPrincipal userPrincipal){
 
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
 
         Notice notice=Notice.builder()
                 .title(noticeCreate.getTitle())
