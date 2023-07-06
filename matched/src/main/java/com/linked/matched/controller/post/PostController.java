@@ -1,5 +1,6 @@
 package com.linked.matched.controller.post;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEdit;
 import com.linked.matched.request.post.PostSearch;
@@ -10,6 +11,7 @@ import com.linked.matched.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -39,8 +41,8 @@ public class PostController {
     }
 
     @PostMapping("/board/{boardName}") //게시글 작성
-    public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate,Principal principal){
-        postService.write(postCreate,principal);//dto로 만들어서 만들때 필요한것을 넣어준다.
+    public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        postService.write(postCreate,userPrincipal);//dto로 만들어서 만들때 필요한것을 넣어준다.
         return new ResponseEntity<>(new ResponseDto("게시글 작성이 되었습니다."), HttpStatus.OK);
 
     }
@@ -51,17 +53,17 @@ public class PostController {
     }
 
     @PatchMapping("/board/{boardName}/{postId}")// 게시글 수정 
-    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit, Principal principal){
+    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
         //request body
-        if(postService.edit(postId, postEdit,principal)) {
+        if(postService.edit(postId, postEdit,userPrincipal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.OK);
     }
 
     @DeleteMapping("/board/{boardName}/{postId}") // 게시글 삭제 
-    public ResponseEntity<Object> deletePost(@PathVariable String boardName, @PathVariable Long postId, Principal principal)  {
-        if(postService.delete(postId,principal)) {
+    public ResponseEntity<Object> deletePost(@PathVariable String boardName, @PathVariable Long postId,@AuthenticationPrincipal UserPrincipal userPrincipal)  {
+        if(postService.delete(postId,userPrincipal)) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);

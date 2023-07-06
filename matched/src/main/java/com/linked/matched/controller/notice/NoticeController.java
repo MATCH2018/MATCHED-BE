@@ -1,5 +1,6 @@
 package com.linked.matched.controller.notice;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.ResponseDto;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,8 +29,8 @@ public class NoticeController {
 
     @PostMapping("/board/notice") // 공지 글 작성
     @PreAuthorize("hasAnyRole('ADMIN')") 
-    public ResponseEntity<Object> createNotice(@RequestBody NoticeCreate noticeCreate, Principal principal){// 공지 작성이 되었습니다.
-        noticeService.writeNotice(noticeCreate,principal);
+    public ResponseEntity<Object> createNotice(@RequestBody NoticeCreate noticeCreate, @AuthenticationPrincipal UserPrincipal userPrincipal){// 공지 작성이 되었습니다.
+        noticeService.writeNotice(noticeCreate,userPrincipal);
         return new ResponseEntity<>(new ResponseDto("공지 작성이 되었습니다."), HttpStatus.OK);
     }
 

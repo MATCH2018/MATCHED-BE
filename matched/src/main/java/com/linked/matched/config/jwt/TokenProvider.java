@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -31,10 +32,12 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "NeighborAPI";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+    private final UserDetailsService userDetailsService;
 
     private final Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secret) {
+    public TokenProvider(@Value("${jwt.secret}") String secret, UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
         byte[] keyBytes = Base64.getDecoder().decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -74,20 +77,22 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
+//
+//        if (claims.get(AUTHORITIES_KEY) == null) {
+//            throw new AuthenticationFail();
+//        }
+//
+//        // 클레임에서 권한 정보 가져오기
+//        Collection<? extends GrantedAuthority>authorities=Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+//
+//        // UserDetails 객체를 만들어서 Authentication 리턴
+//        UserDetails principal=new User(claims.getSubject(), "", authorities);
 
-        if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new AuthenticationFail();
-        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority>authorities=Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal=new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
     }
 
     // 토큰의 유효성 확인

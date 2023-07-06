@@ -1,5 +1,6 @@
 package com.linked.matched.service.user;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
 import com.linked.matched.request.user.*;
@@ -19,15 +20,15 @@ public interface UserService {
 
     void refreshTokenDelete(DeleteTokenDto deleteTokenDto);
 
-    void deleteUser(Principal principal);
+    void deleteUser(UserPrincipal userPrincipal);
 
-    void edit(Principal principal, UserEdit userEdit);
+    void edit(UserPrincipal userPrincipal, UserEdit userEdit);
 
-    void passwordEdit(Principal principal, PwdEdit pwdEdit);
+    void passwordEdit(UserPrincipal userPrincipal, PwdEdit pwdEdit);
 
     void passwordChange(PwdChange pwdChange);
 
     UserMail findUserEmail(Long applicantId);
 
-     UserProfile viewUser(Principal principal);
+     UserProfile viewUser(UserPrincipal userPrincipal);
 }

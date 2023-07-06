@@ -1,5 +1,6 @@
 package com.linked.matched.service.notice;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
@@ -12,7 +13,7 @@ public interface NoticeService {
 
     NoticeResponse findNotice(Long noticeId);
 
-    void writeNotice(NoticeCreate noticeCreate, Principal principal);
+    void writeNotice(NoticeCreate noticeCreate, UserPrincipal userPrincipal);
 
     void editNotice(Long noticeId, NoticeEdit noticeEdit);
 

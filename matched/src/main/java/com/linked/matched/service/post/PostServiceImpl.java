@@ -1,5 +1,6 @@
 package com.linked.matched.service.post;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -35,13 +36,15 @@ public class PostServiceImpl implements PostService{
                 .collect(Collectors.toList());
     }
 
+    @Override
     public PostOneResponse findPost(Long postId) {
         return postRepository.getPostAndUser(postId);
     }
 
-    public void write(PostCreate postCreate,Principal principal) {
+    @Override
+    public void write(PostCreate postCreate,UserPrincipal userPrincipal) {
 
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
 
         Post post = Post.builder()
                 .title(postCreate.getTitle())
@@ -55,11 +58,12 @@ public class PostServiceImpl implements PostService{
     }
 
     @Transactional
-    public Boolean edit(Long postId, PostEdit postEdit, Principal principal) {
+    @Override
+    public Boolean edit(Long postId, PostEdit postEdit, UserPrincipal userPrincipal) {
         //게시글 정정
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
 
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
             post.edit(postEdit);
@@ -68,13 +72,14 @@ public class PostServiceImpl implements PostService{
         return false;
     }
 
-    public Boolean delete(Long postId, Principal principal) {
+    @Override
+    public Boolean delete(Long postId, UserPrincipal userPrincipal) {
         //삭제
         //리턴 값 필요 없음
         //예외처리 해줘야한다.
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
             postRepository.delete(post);
             return true;
@@ -83,9 +88,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostResponse> findPostUser(Principal principal) {
+    public List<PostResponse> findPostUser(UserPrincipal userPrincipal) {
 
-        User user = userRepository.findById(Long.valueOf(principal.getName())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
 
         return postRepository.findByUser(user).stream()
                 .map(PostResponse::new)
