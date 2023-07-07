@@ -1,6 +1,7 @@
 package com.linked.matched.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -45,18 +48,11 @@ class NoticeControllerTest {
         noticeRepository.deleteAll();
     }
 
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-    }
-
 
     @Test
     @DisplayName("공지 생성")
-    @WithMockUser(username = "1234",roles = "ROLE_USER",password = "match123")
+    @WithAuthUser
+    @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void test1() throws Exception {
 
         NoticeCreate notice = NoticeCreate.builder()
