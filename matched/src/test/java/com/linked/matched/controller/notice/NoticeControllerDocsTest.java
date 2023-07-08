@@ -2,6 +2,7 @@ package com.linked.matched.controller.notice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
@@ -54,7 +55,7 @@ public class NoticeControllerDocsTest {
 
     @Test
     @DisplayName("공지 저장")
-    @WithMockUser
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test1() throws Exception {
 
         NoticeCreate notice = NoticeCreate.builder()
@@ -80,6 +81,7 @@ public class NoticeControllerDocsTest {
 
     @Test
     @DisplayName("공지 수정")
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test2() throws Exception {
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -108,6 +110,7 @@ public class NoticeControllerDocsTest {
 
     @Test
     @DisplayName("글 삭제")
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test3() throws Exception {
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -129,6 +132,7 @@ public class NoticeControllerDocsTest {
 
     @Test
     @DisplayName("글 1개 조회")
+    @WithAuthUser
     void test4() throws Exception {
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -161,6 +165,7 @@ public class NoticeControllerDocsTest {
     }
     @Test
     @DisplayName("공지 목록 조회")
+    @WithAuthUser
     void test5() throws Exception {
         Notice notice = Notice.builder()
                 .title("제목입니다.")

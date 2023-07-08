@@ -44,7 +44,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .limit(postSearch.getSize())
                 .offset(postSearch.getOffset())
                 .orderBy(post.createdAt.desc())
-                .distinct()
                 .fetch();
     }
 
@@ -80,7 +79,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .leftJoin(post.applicant,applicant)
                 .fetchJoin()
                 .where(applicant.user.eq(user))
-                .distinct()
                 .fetch();
     }
 

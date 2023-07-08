@@ -23,7 +23,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .leftJoin(user.applicant ,applicant)
                 .fetchJoin()
                 .where(applicant.post.eq(post))
-                .distinct()
                 .fetch();
     }
 }

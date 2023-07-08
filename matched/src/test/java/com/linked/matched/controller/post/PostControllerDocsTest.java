@@ -2,6 +2,7 @@ package com.linked.matched.controller.post;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -61,6 +62,7 @@ public class PostControllerDocsTest {
 
     @Test
     @DisplayName("글 단건 조회")
+    @WithAuthUser
     void test() throws Exception {
         Post request = Post.builder()
                 .postId(1L)
@@ -95,8 +97,9 @@ public class PostControllerDocsTest {
 
     }
 
-  //  @Test
+    @Test
     @DisplayName("글 저장하기")
+    @WithAuthUser
     void test2() throws Exception {
 
 
@@ -126,8 +129,9 @@ public class PostControllerDocsTest {
                 );
     }
     
-  //  @Test
+    @Test
     @DisplayName("글 수정")
+    @WithAuthUser
     void test3() throws Exception {
 
 
@@ -163,8 +167,9 @@ public class PostControllerDocsTest {
                 );
     }
 
-  //  @Test
+    @Test
     @DisplayName("글 삭제")
+    @WithAuthUser
     void test4() throws Exception {
         Post request = Post.builder()
                 .postId(1L)
@@ -191,6 +196,7 @@ public class PostControllerDocsTest {
 
     @Test
     @DisplayName("글 목록 조회")
+    @WithAuthUser
     void test5() throws Exception {
         Post request = Post.builder()
                 .postId(1L)

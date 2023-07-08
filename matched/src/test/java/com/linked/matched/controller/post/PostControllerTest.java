@@ -1,6 +1,7 @@
 package com.linked.matched.controller.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -45,7 +46,7 @@ class PostControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAuthUser
     @DisplayName("글 목록 조회")
     void test1() throws Exception {
 
@@ -90,7 +91,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 저장")
-    @WithMockUser
+    @WithAuthUser
     void test2() throws Exception {
         //유저를 저장시켜야한다.
         User user = User.builder()
@@ -129,7 +130,7 @@ class PostControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAuthUser
     @DisplayName("글 수정")
     void test3() throws Exception {
         Post request = Post.builder()
@@ -160,7 +161,7 @@ class PostControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAuthUser
     @DisplayName("글 삭제")
     void test4() throws Exception {
         Post request = Post.builder()
@@ -183,7 +184,7 @@ class PostControllerTest {
         Assertions.assertEquals(postRepository.count(),0);
     }
     @Test
-    @WithMockUser
+    @WithAuthUser
     @DisplayName("글 1개 조회")
     void test5() throws Exception {
         Post request = Post.builder()

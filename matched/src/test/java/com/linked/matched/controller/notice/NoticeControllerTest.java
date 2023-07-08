@@ -1,6 +1,7 @@
 package com.linked.matched.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
@@ -9,12 +10,17 @@ import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEdit;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -37,26 +43,15 @@ class NoticeControllerTest {
     @Autowired
     private NoticeRepository noticeRepository;
 
-    @Autowired
-    private WebApplicationContext context;
-
     @AfterEach
     void clean(){
         noticeRepository.deleteAll();
     }
 
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-    }
-
 
     @Test
     @DisplayName("공지 생성")
-    @WithMockUser(username = "1234",roles = "ROLE_USER",password = "match123")
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test1() throws Exception {
 
         NoticeCreate notice = NoticeCreate.builder()
@@ -67,6 +62,7 @@ class NoticeControllerTest {
         String json = objectMapper.writeValueAsString(notice);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/board/notice")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf().asHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -80,6 +76,7 @@ class NoticeControllerTest {
 
     @Test
     @DisplayName("공지 수정")
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test2() throws Exception{
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -107,6 +104,7 @@ class NoticeControllerTest {
     
     @Test
     @DisplayName("글 삭제")
+    @WithAuthUser(authorityName="ROLE_ADMIN")
     void test3() throws Exception{
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -126,6 +124,7 @@ class NoticeControllerTest {
     
     @Test
     @DisplayName("글 1개 조회")
+    @WithAuthUser
     void test4() throws Exception{
         Notice notice = Notice.builder()
                 .title("제목입니다.")
@@ -151,6 +150,7 @@ class NoticeControllerTest {
     
     @Test
     @DisplayName("공지 목록 조회")
+    @WithAuthUser
     void test5() throws Exception {
         Notice notice = Notice.builder()
                 .title("제목입니다.")
