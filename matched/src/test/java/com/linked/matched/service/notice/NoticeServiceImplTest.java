@@ -1,5 +1,6 @@
 package com.linked.matched.service.notice;
 
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
@@ -36,6 +37,7 @@ class NoticeServiceImplTest {
 
     @Test
     @DisplayName("공지 작성")
+    @WithAuthUser
     void test(){
 
         NoticeCreate noticeCreate = NoticeCreate.builder()

@@ -48,7 +48,6 @@ class UserServiceImplTest {
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
-//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
                 .sex("남성")
                 .build();
 

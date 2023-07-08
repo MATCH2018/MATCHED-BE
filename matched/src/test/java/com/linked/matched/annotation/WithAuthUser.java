@@ -10,5 +10,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface WithAuthUser {
     String loginId() default "1234";
     String password() default "match123";
-    String role() default "ROLE_USER";
+    String authorityName() default "ROLE_USER";
 }
