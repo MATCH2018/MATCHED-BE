@@ -20,9 +20,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     @Override
     public List<User> getUserList(Post post) {
         return jpaQueryFactory.selectFrom(user)
-                .leftJoin(user.applicant ,applicant)
-                .fetchJoin()
+                .join(user.applicant ,applicant)
                 .where(applicant.post.eq(post))
+                .distinct()
                 .fetch();
     }
 }

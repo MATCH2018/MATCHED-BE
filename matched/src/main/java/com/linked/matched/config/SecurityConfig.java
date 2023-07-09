@@ -62,8 +62,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
+                //csrf 문제
                 .csrf().disable()
 
+                //cors 문제
                 .httpBasic().disable()
                 .cors()
                 .configurationSource(corsConfigurationSource())
@@ -73,7 +75,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                //외부 주소받을 수 있게하기
+                //외부 주소받기
                 .and()
                 .headers().frameOptions().sameOrigin()
 
@@ -85,8 +87,6 @@ public class SecurityConfig {
                 //HttpServletRequest를 사용하는 요청들에 대한 접근 제한 설정
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/**").permitAll()
-
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/join").permitAll()

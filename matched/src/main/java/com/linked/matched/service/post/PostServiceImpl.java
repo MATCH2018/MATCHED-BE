@@ -60,7 +60,6 @@ public class PostServiceImpl implements PostService{
     @Transactional
     @Override
     public Boolean edit(Long postId, PostEdit postEdit, UserPrincipal userPrincipal) {
-        //게시글 정정
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
@@ -74,9 +73,6 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Boolean delete(Long postId, UserPrincipal userPrincipal) {
-        //삭제
-        //리턴 값 필요 없음
-        //예외처리 해줘야한다.
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
