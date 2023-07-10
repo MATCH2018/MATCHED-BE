@@ -36,7 +36,6 @@ public class ApplicantController {
     
     @GetMapping("/match/applicant")//지원자가 매칭 지원한 게시글 목록 조회
     public List<PostResponse> getListApplicant(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        System.out.println("println : "+userPrincipal.getUsername());
         return applicantService.applicantPosts(userPrincipal);
     }
 

@@ -8,7 +8,7 @@ public class SecurityUtil {
 
     private SecurityUtil(){}
 
-    // SecurityContext 에 유저 정보가 저장되는 시점 // 그럼 그냥 하나열고 확인하고 얼마나 있는지 확인 정도
+    // SecurityContext 에 유저 정보가 저장되는 시점
     // Request 가 들어올 때 JwtFilter 의 doFilter 에서 저장
     public static String getCurrentUserId(){
         final Authentication authentication= SecurityContextHolder.getContext().getAuthentication();

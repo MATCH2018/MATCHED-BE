@@ -13,10 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")      //패턴
                 .allowedOriginPatterns("*")    //URL
-                .allowCredentials(true) // 보안과 관련되어있다. -false면 API 호출에 대한 인증 정보를 웹 브라우저에서 전송하지 않습니다 //여기 바꿈
+                .allowCredentials(true) // 보안과 관련
                 .allowedHeaders("Origin, X-Requested-With, Content-Type, Accept, Authorization")  //header
                 .allowedMethods("GET", "POST", "PATCH", "DELETE","OPTIONS");     //method
-//                .maxAge(3600)
-//                .exposedHeaders("Authorization");
     }
 }

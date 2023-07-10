@@ -68,7 +68,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return jpaQueryFactory.select(Projections
                         .constructor(PostOneResponse.class,post.title,post.content,post.createdAt,post.limitPeople,post.boardName,user.userId,user.name,user.department))
                 .from(post)
-                .join(post.user,user)
+                .leftJoin(post.user,user).fetchJoin()
                 .where(post.postId.eq(postId))
                 .fetchOne();
     }
@@ -76,8 +76,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     @Override
     public List<Post> getApplicantPosts(User user) {
         return jpaQueryFactory.selectFrom(post)
-                .leftJoin(post.applicant,applicant)
-                .fetchJoin()
+                .join(post.applicant,applicant)
                 .where(applicant.user.eq(user))
                 .fetch();
     }
