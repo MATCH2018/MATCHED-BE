@@ -40,9 +40,9 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void writeNotice(NoticeCreate noticeCreate, UserPrincipal userPrincipal){
+    public void writeNotice(NoticeCreate noticeCreate, Long id){
 
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new UserNotFound());
 
         Notice notice=Notice.builder()
                 .title(noticeCreate.getTitle())

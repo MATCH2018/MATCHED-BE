@@ -1,5 +1,6 @@
 package com.linked.matched.service.post;
 
+import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -41,12 +42,6 @@ class PostServiceTest {
     @DisplayName("글 작성")
     void test(){
 
-        User user=User.builder()
-                .userId(1L)
-                .loginId("123")
-                .password("123")
-                .build();
-
         //given
         PostCreate postCreate = PostCreate.builder()
                 .title("제목임다.")
@@ -55,17 +50,15 @@ class PostServiceTest {
                 .boardName(BoardStatus.valueOf("club"))
                 .build();
 
-//        Principal principal = user.getUserId();
-
         //when
-//        postService.write(postCreate,principal);
+        postService.write(postCreate,);
 
         //then
-//        Assertions.assertEquals(1L,postRepository.count());
-//        Post post = postRepository.findAll().get(0);
-//        Assertions.assertEquals("제목임다.",post.getTitle());
-//        Assertions.assertEquals("내용임다.",post.getContent());
-//        Assertions.assertEquals(BoardStatus.valueOf("club"),post.getBoardName());
+        Assertions.assertEquals(1L,postRepository.count());
+        Post post = postRepository.findAll().get(0);
+        Assertions.assertEquals("제목임다.",post.getTitle());
+        Assertions.assertEquals("내용임다.",post.getContent());
+        Assertions.assertEquals(BoardStatus.valueOf("club"),post.getBoardName());
     }
 
     @Test
@@ -111,10 +104,10 @@ class PostServiceTest {
         postRepository.save(club);
 
         //when
-//        postService.delete(1L);
+        postService.delete(1L);
 
         //then
-//        Assertions.assertEquals(postRepository.count(),0);
+        Assertions.assertEquals(postRepository.count(),0);
     }
 
     @Test
@@ -122,7 +115,6 @@ class PostServiceTest {
     void test4(){
         //given
         Post club = Post.builder()
-                .postId(1L)
                 .title("제목임다.")
                 .content("내용임다.")
                 .limitPeople(3)
@@ -131,7 +123,6 @@ class PostServiceTest {
         postRepository.save(club);
 
         Post poom = Post.builder()
-                .postId(2L)
                 .title("품앗이 입니다.")
                 .content("품앗이 인원 구합니다.")
                 .limitPeople(5)
@@ -140,13 +131,13 @@ class PostServiceTest {
         postRepository.save(poom);
 
         //when
-//        postService.delete(1L);
-//
-//        PostResponse post = postService.findPost(2L);
-//
-//        //then
-//        Assertions.assertNotNull(post);
-//        Assertions.assertEquals(post.getTitle(),"품앗이 입니다.");
+        postService.delete(club.getPostId(), );
+
+        postService.findPost(poom.getPostId());
+
+        //then
+        Assertions.assertNotNull(post);
+        Assertions.assertEquals(post.getTitle(),"품앗이 입니다.");
     }
 
     @Test
@@ -172,14 +163,14 @@ class PostServiceTest {
                 .boardName(BoardStatus.valueOf("poom"))
                 .build();
 
-//        postService.edit(1L,poom);
-//
-//        //then
-//        Assertions.assertEquals(1L,postRepository.count());
-//        Post post = postRepository.findAll().get(0);
-//        Assertions.assertEquals("품앗이 입니다.",post.getTitle());
-//        Assertions.assertEquals("품앗이 인원 구합니다.",post.getContent());
-//        Assertions.assertEquals(BoardStatus.valueOf("poom"),post.getBoardName());
+        postService.edit(1L,poom);
+
+        //then
+        Assertions.assertEquals(1L,postRepository.count());
+        Post post = postRepository.findAll().get(0);
+        Assertions.assertEquals("품앗이 입니다.",post.getTitle());
+        Assertions.assertEquals("품앗이 인원 구합니다.",post.getContent());
+        Assertions.assertEquals(BoardStatus.valueOf("poom"),post.getBoardName());
     }
 
     @Test

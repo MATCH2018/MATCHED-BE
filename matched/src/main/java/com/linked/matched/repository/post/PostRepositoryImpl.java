@@ -78,6 +78,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return jpaQueryFactory.selectFrom(post)
                 .join(post.applicant,applicant)
                 .where(applicant.user.eq(user))
+                .distinct()
                 .fetch();
     }
 

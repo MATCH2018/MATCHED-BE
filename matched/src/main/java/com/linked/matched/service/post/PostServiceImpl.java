@@ -42,9 +42,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void write(PostCreate postCreate,UserPrincipal userPrincipal) {
+    public void write(PostCreate postCreate,Long id) {
 
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new UserNotFound());
 
         Post post = Post.builder()
                 .title(postCreate.getTitle())
@@ -59,10 +59,10 @@ public class PostServiceImpl implements PostService{
 
     @Transactional
     @Override
-    public Boolean edit(Long postId, PostEdit postEdit, UserPrincipal userPrincipal) {
+    public Boolean edit(Long postId, PostEdit postEdit, Long id) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
             post.edit(postEdit);
@@ -72,10 +72,10 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Boolean delete(Long postId, UserPrincipal userPrincipal) {
+    public Boolean delete(Long postId, Long id) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
             postRepository.delete(post);
             return true;
@@ -84,9 +84,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostResponse> findPostUser(UserPrincipal userPrincipal) {
+    public List<PostResponse> findPostUser(Long id) {
 
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new UserNotFound());
 
         return postRepository.findByUser(user).stream()
                 .map(PostResponse::new)

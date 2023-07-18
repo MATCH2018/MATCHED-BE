@@ -68,7 +68,7 @@ public class UserController {
 
     @PostMapping("/password_edit")//로그인 되었을때 비밀번호 변경
     public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdEdit pwdEdit, @AuthenticationPrincipal UserPrincipal userPrincipal) {//비밀번호가 변경되었습니다.
-        userService.passwordEdit(userPrincipal,pwdEdit);
+        userService.passwordEdit(userPrincipal.getUserId(),pwdEdit);
         return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
 
     }
@@ -82,21 +82,21 @@ public class UserController {
 
     @PatchMapping("/my")//회원정보 수정
     public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,@AuthenticationPrincipal UserPrincipal userPrincipal){//회원정보가 수정되었습니다.
-        userService.edit(userPrincipal, userEdit);
+        userService.edit(userPrincipal.getUserId(), userEdit);
         return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
 
     }
 
     @DeleteMapping("/my") // 회원탈퇴 
     public ResponseEntity<Object> userDelete(@AuthenticationPrincipal UserPrincipal userPrincipal){//그냥 삭제해주면 될듯
-        userService.deleteUser(userPrincipal);
+        userService.deleteUser(userPrincipal.getUserId());
         return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
 
     }
     
     @GetMapping("/profile")//회원정보 조회
     public UserProfile profileFind(UserPrincipal userPrincipal){
-        return userService.viewUser(userPrincipal);
+        return userService.viewUser(userPrincipal.getUserId());
     }
 
 }

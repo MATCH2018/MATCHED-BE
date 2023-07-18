@@ -20,15 +20,15 @@ public interface UserService {
 
     void refreshTokenDelete(DeleteTokenDto deleteTokenDto);
 
-    void deleteUser(UserPrincipal userPrincipal);
+    void deleteUser(Long id);
 
-    void edit(UserPrincipal userPrincipal, UserEdit userEdit);
+    void edit(Long id, UserEdit userEdit);
 
-    void passwordEdit(UserPrincipal userPrincipal, PwdEdit pwdEdit);
+    void passwordEdit(Long id, PwdEdit pwdEdit);
 
     void passwordChange(PwdChange pwdChange);
 
     UserMail findUserEmail(Long applicantId);
 
-     UserProfile viewUser(UserPrincipal userPrincipal);
+     UserProfile viewUser(Long id);
 }

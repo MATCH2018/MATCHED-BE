@@ -114,24 +114,24 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteUser(UserPrincipal userPrincipal) {
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
         userRepository.delete(user);
     }
 
     @Override
     @Transactional
-    public void edit(UserPrincipal userPrincipal, UserEdit userEdit) {
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+    public void edit(Long id, UserEdit userEdit) {
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
         user.edit(userEdit);
     }
 
     @Override
     @Transactional
-    public void passwordEdit(UserPrincipal userPrincipal, PwdEdit pwdEdit) {
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+    public void passwordEdit(Long id, PwdEdit pwdEdit) {
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
@@ -159,8 +159,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserProfile viewUser(UserPrincipal userPrincipal) {
-        return userRepository.findById(Long.valueOf(userPrincipal.getUserId()))
+    public UserProfile viewUser(Long id) {
+        return userRepository.findById(Long.valueOf(id))
                 .map(UserProfile::new)
                 .orElseThrow(() -> new UserNotFound());
     }

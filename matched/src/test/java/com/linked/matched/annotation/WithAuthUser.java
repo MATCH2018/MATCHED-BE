@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = AuthUserSecurityContextFactory.class)
 public @interface WithAuthUser {
-    String loginId() default "1234";
+    String loginId() default "123";
     String password() default "match123";
     String authorityName() default "ROLE_USER";
 }
