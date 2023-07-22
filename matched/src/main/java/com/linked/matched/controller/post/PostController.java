@@ -42,7 +42,7 @@ public class PostController {
 
     @PostMapping("/board/{boardName}") //게시글 작성
     public ResponseEntity<Object> createPost(@PathVariable String boardName, @RequestBody PostCreate postCreate, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        postService.write(postCreate,userPrincipal);//dto로 만들어서 만들때 필요한것을 넣어준다.
+        postService.write(postCreate,userPrincipal.getUserId());//dto로 만들어서 만들때 필요한것을 넣어준다.
         return new ResponseEntity<>(new ResponseDto("게시글 작성이 되었습니다."), HttpStatus.OK);
 
     }
@@ -55,7 +55,7 @@ public class PostController {
     @PatchMapping("/board/{boardName}/{postId}")// 게시글 수정 
     public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
         //request body
-        if(postService.edit(postId, postEdit,userPrincipal)) {
+        if(postService.edit(postId, postEdit,userPrincipal.getUserId())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.OK);
@@ -63,7 +63,7 @@ public class PostController {
 
     @DeleteMapping("/board/{boardName}/{postId}") // 게시글 삭제 
     public ResponseEntity<Object> deletePost(@PathVariable String boardName, @PathVariable Long postId,@AuthenticationPrincipal UserPrincipal userPrincipal)  {
-        if(postService.delete(postId,userPrincipal)) {
+        if(postService.delete(postId,userPrincipal.getUsername())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);

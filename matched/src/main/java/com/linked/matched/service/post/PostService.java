@@ -15,13 +15,13 @@ public interface PostService {
 
     PostOneResponse findPost(Long postId);
 
-    void write(PostCreate postCreate, UserPrincipal userPrincipal);
+    void write(PostCreate postCreate, Long id );
 
-    Boolean edit(Long postId, PostEdit postEdit, UserPrincipal userPrincipal);
+    Boolean edit(Long postId, PostEdit postEdit, Long id);
 
-    Boolean delete(Long postId, UserPrincipal userPrincipal);
+    Boolean delete(Long postId, String loginId);
 
-    List<PostResponse> findPostUser(UserPrincipal userPrincipal);
+    List<PostResponse> findPostUser(Long id);
 
     List<PostResponse> searchPost(String boardName,String keyword, PostSearch postSearch);
 

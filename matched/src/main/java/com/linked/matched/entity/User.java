@@ -19,7 +19,7 @@ import java.util.*;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String loginId;
     private String password;

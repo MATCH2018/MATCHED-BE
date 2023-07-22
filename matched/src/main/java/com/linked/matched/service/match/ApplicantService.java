@@ -29,8 +29,8 @@ public class ApplicantService {
     private final PostRepository postRepository;
 
     @Transactional
-    public boolean applyPost(Long postId, UserPrincipal userPrincipal){
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
+    public boolean applyPost(Long postId, Long id){
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -47,8 +47,8 @@ public class ApplicantService {
     }
 
     @Transactional
-    public void cancelApply(Long postId, UserPrincipal userPrincipal){
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(() -> new UserNotFound());
+    public void cancelApply(Long postId,Long id){
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new UserNotFound());
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
@@ -89,8 +89,8 @@ public class ApplicantService {
 
     }
 
-    public List<PostResponse> applicantPosts(UserPrincipal userPrincipal) {
-        User user = userRepository.findById(Long.valueOf(userPrincipal.getUserId())).orElseThrow(UserNotFound::new);
+    public List<PostResponse> applicantPosts(Long id) {
+        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
         return postRepository.getApplicantPosts(user).stream()
                 .map(PostResponse::new)

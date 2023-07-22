@@ -29,8 +29,8 @@ public class MatchController {
     private final ApplicantService applicantService;
     
     @GetMapping("/match") //내 게시글 목록 조회
-    public List<PostResponse> postList(UserPrincipal userPrincipal){//list로 받는데 querydsl을 사용해야한다.
-       return postService.findPostUser(userPrincipal);
+    public List<PostResponse> postList(@AuthenticationPrincipal UserPrincipal userPrincipal){//list로 받는데 querydsl을 사용해야한다.
+       return postService.findPostUser(userPrincipal.getUserId());
     }
 
     @GetMapping("/match/my/{postId}") //내 게시글 자세히 조회
@@ -40,7 +40,7 @@ public class MatchController {
 
     @PatchMapping("/match/my/{postId}") //내 게시글 수정
     public ResponseEntity<Object> patchMatchPost(@PathVariable Long postId,@RequestBody PostEdit postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        if(postService.edit(postId, postEdit,userPrincipal)) {
+        if(postService.edit(postId, postEdit,userPrincipal.getUserId())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("수정할 권한이 없습니다."), HttpStatus.OK);
@@ -48,7 +48,7 @@ public class MatchController {
 
     @DeleteMapping("/match/my/{postId}")// 내 게시글 삭제
     public ResponseEntity<Object> deleteMatchPost(@PathVariable Long postId, @AuthenticationPrincipal UserPrincipal userPrincipal)  {
-        if(postService.delete(postId,userPrincipal)) {
+        if(postService.delete(postId,userPrincipal.getUsername())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);

@@ -30,7 +30,7 @@ public class NoticeController {
     @PostMapping("/board/notice") // 공지 글 작성
     @PreAuthorize("hasAnyRole('ADMIN')") 
     public ResponseEntity<Object> createNotice(@RequestBody NoticeCreate noticeCreate, @AuthenticationPrincipal UserPrincipal userPrincipal){// 공지 작성이 되었습니다.
-        noticeService.writeNotice(noticeCreate,userPrincipal);
+        noticeService.writeNotice(noticeCreate,userPrincipal.getUserId());
         return new ResponseEntity<>(new ResponseDto("공지 작성이 되었습니다."), HttpStatus.OK);
     }
 

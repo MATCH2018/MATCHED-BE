@@ -53,8 +53,6 @@ public class PostControllerDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-
     @AfterEach
     void clean() {
         postRepository.deleteAll();

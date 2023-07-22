@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 public class Post {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
     private String title;
     private String content;

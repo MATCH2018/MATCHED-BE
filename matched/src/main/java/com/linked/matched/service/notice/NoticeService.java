@@ -13,7 +13,7 @@ public interface NoticeService {
 
     NoticeResponse findNotice(Long noticeId);
 
-    void writeNotice(NoticeCreate noticeCreate, UserPrincipal userPrincipal);
+    void writeNotice(NoticeCreate noticeCreate,Long id);
 
     void editNotice(Long noticeId, NoticeEdit noticeEdit);
 

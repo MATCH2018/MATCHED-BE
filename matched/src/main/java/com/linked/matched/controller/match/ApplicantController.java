@@ -21,7 +21,7 @@ public class ApplicantController {
 
     @PostMapping("/match/{postId}") //매칭 지원
     public ResponseEntity<Object> apply(@PathVariable Long postId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        if(applicantService.applyPost(postId,userPrincipal)) {
+        if(applicantService.applyPost(postId,userPrincipal.getUserId())) {
             return new ResponseEntity<>(new ResponseDto("매칭 지원이 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("이미 지원이 되었습니다."), HttpStatus.CONFLICT);
@@ -29,14 +29,14 @@ public class ApplicantController {
 
     @DeleteMapping("/match/{postId}") //매칭 지원 취소
     public ResponseEntity<Object> cancelApply(@PathVariable Long postId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        applicantService.cancelApply(postId,userPrincipal);
+        applicantService.cancelApply(postId,userPrincipal.getUserId());
         return new ResponseEntity<>(new ResponseDto("매칭 지원을 취소 했습니다."), HttpStatus.OK);
 
     }
     
     @GetMapping("/match/applicant")//지원자가 매칭 지원한 게시글 목록 조회
     public List<PostResponse> getListApplicant(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return applicantService.applicantPosts(userPrincipal);
+        return applicantService.applicantPosts(userPrincipal.getUserId());
     }
 
 }

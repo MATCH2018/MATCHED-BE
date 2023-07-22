@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class PostReport {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long reporterId;
