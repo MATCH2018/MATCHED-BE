@@ -3,6 +3,7 @@ package com.linked.matched.service.notice;
 import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
@@ -29,15 +30,25 @@ class NoticeServiceImplTest {
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void setUp(){
+        User user=User.builder()
+                .userId(1L)
+                .loginId("3333")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+    }
+
     @AfterEach
     void clean(){
         noticeRepository.deleteAll();
-        userRepository.deleteAll();
+        User user = userRepository.findByLoginId("3333").orElseThrow(() -> new UserNotFound());
+        userRepository.deleteById(user.getUserId());
     }
 
     @Test
     @DisplayName("공지 작성")
-    @WithAuthUser
     void test(){
 
         NoticeCreate noticeCreate = NoticeCreate.builder()
@@ -45,14 +56,16 @@ class NoticeServiceImplTest {
                 .content("내용입니다")
                 .build();
 
-//        noticeService.writeNotice(noticeCreate);
-//
-//        Assertions.assertEquals(noticeRepository.count(),1);
-//
-//        Notice notice = noticeRepository.findAll().iterator().next();
-//
-//        Assertions.assertEquals(notice.getTitle(),"제목입니다");
-//        Assertions.assertEquals(notice.getContent(),"내용입니다");
+        User user = userRepository.findByLoginId("3333").orElseThrow(() -> new UserNotFound());
+
+        noticeService.writeNotice(noticeCreate,user.getUserId());
+
+        Assertions.assertEquals(noticeRepository.count(),1);
+
+        Notice notice = noticeRepository.findAll().iterator().next();
+
+        Assertions.assertEquals(notice.getTitle(),"제목입니다");
+        Assertions.assertEquals(notice.getContent(),"내용입니다");
     }
 
     @Test

@@ -62,7 +62,7 @@ public class PostServiceImpl implements PostService{
     public Boolean edit(Long postId, PostEdit postEdit, Long id) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(id).orElseThrow(UserNotFound::new);
 
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
             post.edit(postEdit);
@@ -71,13 +71,15 @@ public class PostServiceImpl implements PostService{
         return false;
     }
 
+    @Transactional
     @Override
-    public Boolean delete(Long postId, Long id) {
+    public Boolean delete(Long postId, String loginId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
+        User user = userRepository.findByLoginId(loginId).orElseThrow(UserNotFound::new);
+
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
-            postRepository.delete(post);
+            postRepository.deleteById(post.getPostId());
             return true;
         }
         return false;

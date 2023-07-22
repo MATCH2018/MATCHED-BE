@@ -63,7 +63,7 @@ public class PostController {
 
     @DeleteMapping("/board/{boardName}/{postId}") // 게시글 삭제 
     public ResponseEntity<Object> deletePost(@PathVariable String boardName, @PathVariable Long postId,@AuthenticationPrincipal UserPrincipal userPrincipal)  {
-        if(postService.delete(postId,userPrincipal.getUserId())) {
+        if(postService.delete(postId,userPrincipal.getUsername())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 삭제 되었습니다."), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDto("삭제할 권한이 없습니다."), HttpStatus.OK);

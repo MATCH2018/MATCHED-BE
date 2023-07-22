@@ -19,7 +19,7 @@ public interface PostService {
 
     Boolean edit(Long postId, PostEdit postEdit, Long id);
 
-    Boolean delete(Long postId, Long id);
+    Boolean delete(Long postId, String loginId);
 
     List<PostResponse> findPostUser(Long id);
 

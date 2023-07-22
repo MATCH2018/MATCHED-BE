@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 public class Notice {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long noticeId;
     private String title;
     private String content;

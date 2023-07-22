@@ -68,7 +68,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return jpaQueryFactory.select(Projections
                         .constructor(PostOneResponse.class,post.title,post.content,post.createdAt,post.limitPeople,post.boardName,user.userId,user.name,user.department))
                 .from(post)
-                .leftJoin(post.user,user).fetchJoin()
+                .leftJoin(post.user,user)
                 .where(post.postId.eq(postId))
                 .fetchOne();
     }
