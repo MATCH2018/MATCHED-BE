@@ -1,7 +1,7 @@
 package com.linked.matched.entity;
 
 
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.UserEditor;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,12 +61,21 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void edit(UserEdit userEdit) {
-        this.name=userEdit.getName();
-        this.department=userEdit.getDepartment();
-        this.gradle=userEdit.getGradle();
-        this.birth=userEdit.getBirth();
-        this.sex=userEdit.getSex();
+    public void edit(UserEditor userEditor) {
+        this.name=userEditor.getName();
+        this.department=userEditor.getDepartment();
+        this.gradle=userEditor.getGradle();
+        this.birth=userEditor.getBirth();
+        this.sex=userEditor.getSex();
+    }
+
+    public UserEditor.UserEditorBuilder toEditor(){
+        return UserEditor.builder()
+                .name(name)
+                .department(department)
+                .gradle(gradle)
+                .birth(birth)
+                .sex(sex);
     }
 
     public void passwordEdit(String pwdEdit) {

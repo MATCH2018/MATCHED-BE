@@ -1,20 +1,18 @@
 package com.linked.matched.service.notice;
 
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Notice;
+import com.linked.matched.request.notice.NoticeEditor;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.post.PostNotFound;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
-import com.linked.matched.request.notice.NoticeEdit;
 import com.linked.matched.response.notice.NoticeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,11 +53,21 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     @Transactional
-    public void editNotice(Long noticeId, NoticeEdit noticeEdit){
+    public void editNotice(Long noticeId, NoticeEditor noticeEdit){
 
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(PostNotFound::new);
 
-        notice.edit(noticeEdit);
+        NoticeEditor.NoticeEditorBuilder noticeEditorBuilder = notice.toEditor();
+
+        if(noticeEdit.getTitle()!=null){
+            noticeEditorBuilder.title(noticeEdit.getTitle());
+        }
+
+        if(noticeEdit.getContent()!=null){
+            noticeEditorBuilder.content(noticeEdit.getContent());
+        }
+
+        notice.edit(noticeEditorBuilder.build());
     }
 
     @Override

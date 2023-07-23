@@ -2,7 +2,7 @@ package com.linked.matched.controller.post;
 
 import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostCreate;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.post.PostOneResponse;
@@ -53,7 +53,7 @@ public class PostController {
     }
 
     @PatchMapping("/board/{boardName}/{postId}")// 게시글 수정 
-    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId,@RequestBody PostEdit postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public ResponseEntity<Object> editPost(@PathVariable String boardName, @PathVariable Long postId, @RequestBody PostEditor postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
         //request body
         if(postService.edit(postId, postEdit,userPrincipal.getUserId())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);

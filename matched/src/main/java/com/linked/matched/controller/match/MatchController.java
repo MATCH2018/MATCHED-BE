@@ -1,7 +1,7 @@
 package com.linked.matched.controller.match;
 
 import com.linked.matched.config.jwt.UserPrincipal;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
@@ -39,7 +39,7 @@ public class MatchController {
     }
 
     @PatchMapping("/match/my/{postId}") //내 게시글 수정
-    public ResponseEntity<Object> patchMatchPost(@PathVariable Long postId,@RequestBody PostEdit postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public ResponseEntity<Object> patchMatchPost(@PathVariable Long postId, @RequestBody PostEditor postEdit, @AuthenticationPrincipal UserPrincipal userPrincipal){
         if(postService.edit(postId, postEdit,userPrincipal.getUserId())) {
             return new ResponseEntity<>(new ResponseDto("게시글이 수정 되었습니다."), HttpStatus.OK);
         }

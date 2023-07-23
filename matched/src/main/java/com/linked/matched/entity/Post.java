@@ -1,7 +1,7 @@
 package com.linked.matched.entity;
 
 import com.linked.matched.entity.status.BoardStatus;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,6 @@ import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -54,11 +53,19 @@ public class Post {
         this.user=user;
     }
 
-    public void edit(PostEdit postEdit){
-        this.title=postEdit.getTitle();
-        this.content=postEdit.getContent();
-        this.limitPeople=postEdit.getLimitPeople();
-        this.boardName=postEdit.getBoardName();
+    public void edit(PostEditor postEditor){
+        this.title=postEditor.getTitle();
+        this.content=postEditor.getContent();
+        this.limitPeople=postEditor.getLimitPeople();
+        this.boardName=postEditor.getBoardName();
+    }
+
+    public PostEditor.PostEditorBuilder toEditor(){
+        return PostEditor.builder()
+                .title(title)
+                .content(content)
+                .limitPeople(limitPeople)
+                .boardName(boardName);
     }
 
     public void makeStatusReported() {

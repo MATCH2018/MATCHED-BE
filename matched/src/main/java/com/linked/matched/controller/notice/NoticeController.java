@@ -2,7 +2,7 @@ package com.linked.matched.controller.notice;
 
 import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.notice.NoticeCreate;
-import com.linked.matched.request.notice.NoticeEdit;
+import com.linked.matched.request.notice.NoticeEditor;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.notice.NoticeResponse;
 import com.linked.matched.service.notice.NoticeService;
@@ -41,7 +41,7 @@ public class NoticeController {
 
     @PatchMapping("/board/notice/{noticeId}") // 공지 글 수정
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<Object> editNotice(@PathVariable Long noticeId, @RequestBody NoticeEdit noticeEdit){// 공지 수정 되었습니다.
+    public ResponseEntity<Object> editNotice(@PathVariable Long noticeId, @RequestBody NoticeEditor noticeEdit){// 공지 수정 되었습니다.
         noticeService.editNotice(noticeId,noticeEdit);
         return new ResponseEntity<>(new ResponseDto("공지 수정 되었습니다."), HttpStatus.OK);
     }

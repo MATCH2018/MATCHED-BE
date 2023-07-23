@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @PatchMapping("/my")//회원정보 수정
-    public ResponseEntity<Object> userEdit(@RequestBody UserEdit userEdit,@AuthenticationPrincipal UserPrincipal userPrincipal){//회원정보가 수정되었습니다.
+    public ResponseEntity<Object> userEdit(@RequestBody UserEditor userEdit,@AuthenticationPrincipal UserPrincipal userPrincipal){//회원정보가 수정되었습니다.
         userService.edit(userPrincipal.getUserId(), userEdit);
         return new ResponseEntity<>(new ResponseDto("회원정보가 수정 되었습니다."), HttpStatus.OK);
 

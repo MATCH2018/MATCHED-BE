@@ -2,11 +2,12 @@ package com.linked.matched.service.user;
 
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.user.PwdEdit;
-import com.linked.matched.request.user.UserEdit;
+import com.linked.matched.request.user.UserEditor;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
+
+import java.util.Optional;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -34,7 +37,8 @@ class UserServiceImplTest {
 
     @AfterEach
     void clean(){
-        userRepository.deleteAll();
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
+        userRepository.delete(user);
         refreshTokenRepository.deleteAll();
     }
     
@@ -108,7 +112,7 @@ class UserServiceImplTest {
     @DisplayName("비밀번호와 체크비밀번호 다름")
     void test2_3(){
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("5678")
                 .name("김씨")
@@ -133,7 +137,7 @@ class UserServiceImplTest {
     void test3(){
 
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -151,7 +155,7 @@ class UserServiceImplTest {
         }
 
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 
@@ -164,7 +168,7 @@ class UserServiceImplTest {
     @DisplayName("jwt refresh 토큰 확인")
     void test4(){
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -182,14 +186,11 @@ class UserServiceImplTest {
         }
 
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 
         TokenDto user = userService.login(login);
-
-        System.out.println(user.getAccessToken());
-        System.out.println(user.getRefreshToken());
 
         RefreshToken next = refreshTokenRepository.findAll().iterator().next();
 
@@ -212,7 +213,7 @@ class UserServiceImplTest {
     @DisplayName("refreshToken 삭제")
     void test7(){
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -230,7 +231,7 @@ class UserServiceImplTest {
         }
 
         UserLogin login = UserLogin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .build();
 
@@ -253,7 +254,7 @@ class UserServiceImplTest {
     @DisplayName("회원 정보 수정")
     void test8(){
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -274,35 +275,35 @@ class UserServiceImplTest {
 
         User user = userRepository.findAll().iterator().next();
 
-        UserEdit userEdit = UserEdit.builder()
+        UserEditor userEdit = UserEditor.builder()
                 .name("최씨")
                 .department("컴퓨터공학과")
                 .gradle(2)
                 .build();
 
-//        userService.edit(user.getUserId(),userEdit);
-//
-//        User edit = userRepository.findAll().iterator().next();
-//        Assertions.assertEquals(userRepository.findAll().size(), 1);
-//
-//        Assertions.assertEquals(edit.getName(),"최씨");
-//        Assertions.assertEquals(edit.getDepartment(),"컴퓨터공학과");
-//        //여기서 null이 뜬다. null이 안뜨도록 수정해줘야한다.
-//        Assertions.assertEquals(edit.getLoginId(),"아이디입니다");
+        userService.edit(user.getUserId(),userEdit);
+
+        User edit = userRepository.findAll().iterator().next();
+        Assertions.assertEquals(userRepository.findAll().size(), 1);
+
+        Assertions.assertEquals(edit.getName(),"최씨");
+        Assertions.assertEquals(edit.getDepartment(),"컴퓨터공학과");
+        //여기서 null이 뜬다. null이 안뜨도록 수정해줘야한다.
+        Assertions.assertEquals(edit.getLoginId(),"asd@mju.ac.kr");
     }
 
     @Test
     @DisplayName("회원 삭제")
     void test9(){
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
 //                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
-//               .roleStatus(RoleStatus.ROLE_USER)
+                .authorityName("ROLE_USER")
                 .sex("남성")
                 .build();
 
@@ -314,9 +315,9 @@ class UserServiceImplTest {
 
         User next = userRepository.findAll().iterator().next();
 
-//        userService.deleteUser(next.getUserId());
-//
-//        Assertions.assertEquals(userRepository.count(),0);
+        userService.deleteUser(next.getUserId());
+
+        Assertions.assertEquals(userRepository.count(),0);
     }
 
     @Test
@@ -324,7 +325,7 @@ class UserServiceImplTest {
     void test10(){
 
         UserJoin userJoin= UserJoin.builder()
-                .loginId("아이디입니다")
+                .loginId("asd@mju.ac.kr")
                 .password("1234")
                 .checkPassword("1234")
                 .name("김씨")
@@ -350,15 +351,15 @@ class UserServiceImplTest {
                 .checkPassword("5678")
                 .build();
 
-//        userService.passwordEdit(next.getUserId(), newPassword);
-//
-//        UserLogin login = UserLogin.builder()
-//                .loginId("아이디입니다")
-//                .password("5678")
-//                .build();
-//
-//        TokenDto user = userService.login(login);
-//
-//        Assertions.assertNotNull(user);
+        userService.passwordEdit(next.getUserId(), newPassword);
+
+        UserLogin login = UserLogin.builder()
+                .loginId("asd@mju.ac.kr")
+                .password("5678")
+                .build();
+
+        TokenDto user = userService.login(login);
+
+        Assertions.assertNotNull(user);
     }
 }

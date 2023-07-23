@@ -2,7 +2,7 @@ package com.linked.matched.service.post;
 
 import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostCreate;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
@@ -17,7 +17,7 @@ public interface PostService {
 
     void write(PostCreate postCreate, Long id );
 
-    Boolean edit(Long postId, PostEdit postEdit, Long id);
+    Boolean edit(Long postId, PostEditor postEdit, Long id);
 
     Boolean delete(Long postId, String loginId);
 

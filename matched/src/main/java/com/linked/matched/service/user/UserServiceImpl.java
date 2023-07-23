@@ -1,7 +1,6 @@
 package com.linked.matched.service.user;
 
 import com.linked.matched.config.jwt.TokenProvider;
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.email.AlreadyExistsEmailException;
@@ -122,10 +121,28 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void edit(Long id, UserEdit userEdit) {
+    public void edit(Long id, UserEditor userEdit) {
         User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
 
-        user.edit(userEdit);
+        UserEditor.UserEditorBuilder userEditorBuilder = user.toEditor();
+
+        if(userEdit.getName()!=null){
+            userEditorBuilder.name(userEdit.getName());
+        }
+        if (userEdit.getDepartment()!=null){
+            userEditorBuilder.department(userEdit.getDepartment());
+        }
+        if(userEdit.getGradle()!=null){
+            userEditorBuilder.gradle(userEdit.getGradle());
+        }
+        if (userEdit.getBirth()!=null){
+            userEditorBuilder.birth(userEdit.getBirth());
+        }
+        if(userEdit.getSex()!=null){
+            userEditorBuilder.sex(userEdit.getSex());
+        }
+
+        user.edit(UserEditor.builder().build());
     }
 
     @Override

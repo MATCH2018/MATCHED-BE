@@ -22,7 +22,7 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    void edit(Long id, UserEdit userEdit);
+    void edit(Long id, UserEditor userEdit);
 
     void passwordEdit(Long id, PwdEdit pwdEdit);
 

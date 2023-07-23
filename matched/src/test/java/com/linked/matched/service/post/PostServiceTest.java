@@ -8,7 +8,7 @@ import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
@@ -188,7 +188,7 @@ class PostServiceTest {
 
         //when
 
-        PostEdit poom = PostEdit.builder()
+        PostEditor poom = PostEditor.builder()
                 .title("품앗이 입니다.")
                 .content("품앗이 인원 구합니다.")
                 .limitPeople(5)
