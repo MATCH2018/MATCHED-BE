@@ -7,7 +7,7 @@ import com.linked.matched.entity.User;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
-import com.linked.matched.request.notice.NoticeEdit;
+import com.linked.matched.request.notice.NoticeEditor;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,7 +85,7 @@ class NoticeControllerTest {
 
         noticeRepository.save(notice);
 
-        NoticeEdit noticeEdit = NoticeEdit.builder()
+        NoticeEditor noticeEdit = NoticeEditor.builder()
                 .title("제목")
                 .content("내용")
                 .build();

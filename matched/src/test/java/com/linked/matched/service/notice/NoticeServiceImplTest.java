@@ -7,7 +7,7 @@ import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.notice.NoticeRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
-import com.linked.matched.request.notice.NoticeEdit;
+import com.linked.matched.request.notice.NoticeEditor;
 import com.linked.matched.response.notice.NoticeResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +113,7 @@ class NoticeServiceImplTest {
                 .build();
         noticeRepository.save(notice);
 
-        NoticeEdit noticeEdit = NoticeEdit.builder()
+        NoticeEditor noticeEdit = NoticeEditor.builder()
                 .title("제목2")
                 .content("내용2")
                 .build();

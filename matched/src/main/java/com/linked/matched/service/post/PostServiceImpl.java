@@ -1,6 +1,5 @@
 package com.linked.matched.service.post;
 
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -9,7 +8,7 @@ import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
 import com.linked.matched.response.post.PostOneResponse;
 import com.linked.matched.response.post.PostResponse;
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,13 +57,29 @@ public class PostServiceImpl implements PostService{
 
     @Transactional
     @Override
-    public Boolean edit(Long postId, PostEdit postEdit, Long id) {
+    public Boolean edit(Long postId, PostEditor postEdit, Long id) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         User user = userRepository.findById(id).orElseThrow(UserNotFound::new);
 
         if(post.getUser().equals(user)||user.getAuthorityName().equals("ROLE_ADMIN")) {
-            post.edit(postEdit);
+
+            PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
+
+            if(postEdit.getTitle()!=null){
+                postEditorBuilder.title(postEdit.getTitle());
+            }
+            if (postEdit.getContent()!=null){
+                postEditorBuilder.content(postEdit.getContent());
+            }
+            if (postEdit.getBoardName()!=null){
+                postEditorBuilder.boardName(postEdit.getBoardName());
+            }
+            if(postEdit.getLimitPeople()!=null){
+                postEditorBuilder.limitPeople(postEdit.getLimitPeople());
+            }
+
+            post.edit(postEditorBuilder.build());
             return true;
         }
         return false;

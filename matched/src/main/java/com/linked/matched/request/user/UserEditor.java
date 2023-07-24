@@ -1,17 +1,12 @@
 package com.linked.matched.request.user;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEdit {
-
+public class UserEditor {
     private String name;
     private String department;
     private Integer gradle;
@@ -19,7 +14,7 @@ public class UserEdit {
     private String sex;
 
     @Builder
-    public UserEdit(String name, String department, Integer gradle, LocalDate birth, String sex) {
+    public UserEditor(String name, String department, Integer gradle, LocalDate birth, String sex) {
         this.name = name;
         this.department = department;
         this.gradle = gradle;

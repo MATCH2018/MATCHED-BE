@@ -1,15 +1,13 @@
 package com.linked.matched.entity;
 
-import com.linked.matched.request.notice.NoticeEdit;
+import com.linked.matched.request.notice.NoticeEditor;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @Getter
@@ -36,8 +34,14 @@ public class Notice {
         this.user = user;
     }
 
-    public void edit(NoticeEdit noticeEdit) {
-        this.title = noticeEdit.getTitle();
-        this.content=noticeEdit.getContent();
+    public NoticeEditor.NoticeEditorBuilder toEditor(){
+        return NoticeEditor.builder()
+                .title(title)
+                .content(content);
+    }
+
+    public void edit(NoticeEditor noticeEditor) {
+        this.title = noticeEditor.getTitle();
+        this.content=noticeEditor.getContent();
     }
 }

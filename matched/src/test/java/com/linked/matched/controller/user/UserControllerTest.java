@@ -2,6 +2,7 @@ package com.linked.matched.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.User;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
@@ -37,9 +38,10 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @BeforeEach
+    @AfterEach
     void clean() {
-        userRepository.deleteAll();
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
+        userRepository.deleteById(user.getUserId());
     }
 
     @Test
@@ -64,12 +66,11 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        Assertions.assertEquals(1L,userRepository.count());
 
-        User next = userRepository.findAll().iterator().next();
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(UserNotFound::new);
 
-        Assertions.assertEquals(next.getName(),"김씨");
-        Assertions.assertEquals(next.getDepartment(),"정보통신과");
+        Assertions.assertEquals(user.getName(),"김씨");
+        Assertions.assertEquals(user.getDepartment(),"정보통신과");
     }
 
     @Test

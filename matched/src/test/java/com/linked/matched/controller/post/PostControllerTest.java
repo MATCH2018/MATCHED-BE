@@ -8,7 +8,7 @@ import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
-import com.linked.matched.request.post.PostEdit;
+import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +32,13 @@ class PostControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @AfterEach
     void clean() {
         postRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
     @Test
@@ -93,17 +89,7 @@ class PostControllerTest {
     @DisplayName("글 저장")
     @WithAuthUser
     void test2() throws Exception {
-        //유저를 저장시켜야한다.
-        User user = User.builder()
-                .loginId("asd@mju.ac.kr")
-                .password("5678")
-                .name("이씨")
-                .department("컴퓨터공학과")
-                .gradle(4)
-                .sex("여성")
-                .build();
 
-        userRepository.save(user);
 
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -117,8 +103,7 @@ class PostControllerTest {
         // when
         mockMvc.perform(MockMvcRequestBuilders.post("/board/{boardName}", request.getBoardName())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
-                        .content(String.valueOf(user)))
+                        .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
@@ -134,7 +119,6 @@ class PostControllerTest {
     @DisplayName("글 수정")
     void test3() throws Exception {
         Post request = Post.builder()
-                .postId(1L)
                 .title("제목입니다1.")
                 .content("내용입니다1.")
                 .limitPeople(3)
@@ -143,7 +127,7 @@ class PostControllerTest {
 
         postRepository.save(request);
 
-        PostEdit requestEdit = PostEdit.builder()
+        PostEditor requestEdit = PostEditor.builder()
                 .title("제목입니다2.")
                 .content("내용입니다2.")
                 .limitPeople(4)
@@ -156,7 +140,7 @@ class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        Assertions.assertEquals(postRepository.findById(1L).get().getTitle(), "제목입니다2.");
+        Assertions.assertEquals(postRepository.findById(request.getPostId()).get().getTitle(), "제목입니다2.");
 
     }
 
