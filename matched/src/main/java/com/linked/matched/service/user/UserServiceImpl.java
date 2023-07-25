@@ -21,8 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-
 
 @Service
 @Transactional
@@ -122,7 +120,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void edit(Long id, UserEditor userEdit) {
-        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
+        User user = userRepository.findById(id).orElseThrow(UserNotFound::new);
 
         UserEditor.UserEditorBuilder userEditorBuilder = user.toEditor();
 
@@ -142,7 +140,7 @@ public class UserServiceImpl implements UserService{
             userEditorBuilder.sex(userEdit.getSex());
         }
 
-        user.edit(UserEditor.builder().build());
+        user.edit(userEditorBuilder.build());
     }
 
     @Override

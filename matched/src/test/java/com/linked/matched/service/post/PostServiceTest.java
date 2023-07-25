@@ -1,6 +1,5 @@
 package com.linked.matched.service.post;
 
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.security.Principal;
 import java.util.List;
 
 

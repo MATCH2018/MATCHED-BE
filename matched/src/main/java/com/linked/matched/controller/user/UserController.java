@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @DeleteMapping("/my") // 회원탈퇴 
-    public ResponseEntity<Object> userDelete(@AuthenticationPrincipal UserPrincipal userPrincipal){//그냥 삭제해주면 될듯
+    public ResponseEntity<Object> userDelete(@AuthenticationPrincipal UserPrincipal userPrincipal){
         userService.deleteUser(userPrincipal.getUserId());
         return new ResponseEntity<>(new ResponseDto("회원탈퇴 되었습니다."), HttpStatus.OK);
 
