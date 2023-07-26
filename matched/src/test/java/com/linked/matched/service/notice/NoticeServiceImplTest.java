@@ -1,6 +1,5 @@
 package com.linked.matched.service.notice;
 
-import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.user.UserNotFound;

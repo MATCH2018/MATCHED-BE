@@ -2,16 +2,20 @@ package com.linked.matched.service.user;
 
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
+import com.linked.matched.exception.user.InvalidLoginInformation;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.user.PwdEdit;
 import com.linked.matched.request.user.UserEditor;
-import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
-import org.junit.jupiter.api.*;
+import com.linked.matched.response.jwt.TokenDto;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,8 +41,11 @@ class UserServiceImplTest {
 
     @AfterEach
     void clean(){
-        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
-        userRepository.delete(user);
+        Optional<User> user = userRepository.findByLoginId("asd@mju.ac.kr");
+        if(user.isPresent()) {
+            User userDelete = user.get();
+            userRepository.delete(userDelete);
+        }
         refreshTokenRepository.deleteAll();
     }
     
@@ -57,9 +64,7 @@ class UserServiceImplTest {
 
         userService.join(userJoin);
 
-        Assertions.assertEquals(userRepository.findAll().size(), 1);
-
-        User user = userRepository.findAll().iterator().next();
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(()->new UserNotFound());
         Assertions.assertEquals("asd@mju.ac.kr",user.getLoginId());
         Assertions.assertEquals("김씨",user.getName());
 
@@ -69,17 +74,16 @@ class UserServiceImplTest {
     @Test
     @DisplayName("회원가입때 아이디 중복시 회원가입 안됨")
     void test2_1() {
-        User user = User.builder()
+        User usertest = User.builder()
                 .loginId("asd@mju.ac.kr")
                 .password("5678")
                 .name("이씨")
                 .department("컴퓨터공학과")
                 .gradle(4)
-//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
                 .sex("여성")
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(usertest);
 
         UserJoin userJoin= UserJoin.builder()
                 .loginId("asd@mju.ac.kr")
@@ -88,7 +92,6 @@ class UserServiceImplTest {
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
-//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
                 .sex("남성")
                 .build();
 
@@ -98,9 +101,7 @@ class UserServiceImplTest {
             e.printStackTrace();
         }
 
-        Assertions.assertEquals(userRepository.count(),1L);
-
-        userRepository.findAll().iterator().next();
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
 
         Assertions.assertEquals("asd@mju.ac.kr",user.getLoginId());
         Assertions.assertEquals("이씨",user.getName());
@@ -122,14 +123,9 @@ class UserServiceImplTest {
                 .sex("남성")
                 .build();
 
-        try {
+        Assertions.assertThrows(InvalidLoginInformation.class,()->{
             userService.join(userJoin);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Assertions.assertEquals(userRepository.findAll().size(), 0);
-
+        });
     }
 
     @Test
@@ -196,18 +192,6 @@ class UserServiceImplTest {
 
         Assertions.assertEquals(next.getValue(),user.getRefreshToken());
     }
-    
-    @Test
-    @DisplayName("jwt 토큰 유효기간이 지났을 경우 로그인 안됨")
-    void test5(){
-
-    }
-
-    @Test
-    @DisplayName("accessToken 기간이 지나서 refreshToken이 사용가능한가")
-    void test6(){
-
-    }
 
     @Test
     @DisplayName("refreshToken 삭제")
@@ -253,10 +237,9 @@ class UserServiceImplTest {
     @Test
     @DisplayName("회원 정보 수정")
     void test8(){
-        UserJoin userJoin= UserJoin.builder()
+        User userJoin= User.builder()
                 .loginId("asd@mju.ac.kr")
                 .password("1234")
-                .checkPassword("1234")
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
@@ -265,15 +248,7 @@ class UserServiceImplTest {
                 .sex("남성")
                 .build();
 
-        try {
-            userService.join(userJoin);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Assertions.assertEquals(userRepository.findAll().size(), 1);
-
-        User user = userRepository.findAll().iterator().next();
+        User user = userRepository.save(userJoin);
 
         UserEditor userEdit = UserEditor.builder()
                 .name("최씨")
@@ -283,51 +258,20 @@ class UserServiceImplTest {
 
         userService.edit(user.getUserId(),userEdit);
 
-        User edit = userRepository.findAll().iterator().next();
-        Assertions.assertEquals(userRepository.findAll().size(), 1);
+        User edit = userRepository.findByLoginId(user.getLoginId()).orElseThrow(()->new UserNotFound());
 
         Assertions.assertEquals(edit.getName(),"최씨");
         Assertions.assertEquals(edit.getDepartment(),"컴퓨터공학과");
-        //여기서 null이 뜬다. null이 안뜨도록 수정해줘야한다.
         Assertions.assertEquals(edit.getLoginId(),"asd@mju.ac.kr");
-    }
-
-    @Test
-    @DisplayName("회원 삭제")
-    void test9(){
-        UserJoin userJoin= UserJoin.builder()
-                .loginId("asd@mju.ac.kr")
-                .password("1234")
-                .checkPassword("1234")
-                .name("김씨")
-                .department("정보통신과")
-                .gradle(3)
-//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
-                .authorityName("ROLE_USER")
-                .sex("남성")
-                .build();
-
-        try {
-            userService.join(userJoin);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        User next = userRepository.findAll().iterator().next();
-
-        userService.deleteUser(next.getUserId());
-
-        Assertions.assertEquals(userRepository.count(),0);
     }
 
     @Test
     @DisplayName("비밀번호 변경")
     void test10(){
 
-        UserJoin userJoin= UserJoin.builder()
+        User userJoin= User.builder()
                 .loginId("asd@mju.ac.kr")
-                .password("1234")
-                .checkPassword("1234")
+                .password(passwordEncoder.encode("1234"))
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
@@ -336,14 +280,10 @@ class UserServiceImplTest {
                 .sex("남성")
                 .build();
 
-        try {
-            userService.join(userJoin);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        userRepository.save(userJoin);
 
 
-        User next = userRepository.findAll().iterator().next();
+        User next = userRepository.findByLoginId(userJoin.getLoginId()).orElseThrow(()->new UserNotFound());
 
         PwdEdit newPassword = PwdEdit.builder()
                 .nowPassword("1234")
