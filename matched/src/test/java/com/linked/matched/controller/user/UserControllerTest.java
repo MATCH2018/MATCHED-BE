@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
+import com.linked.matched.request.user.PwdChange;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
 import com.linked.matched.service.user.UserService;
@@ -112,12 +113,11 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 성공")
+    @DisplayName("로그인 실패")
     void test3() throws Exception {
-        UserJoin userJoin= UserJoin.builder()
+        User user= User.builder()
                 .loginId("asd@mju.ac.kr")
                 .password("1234")
-                .checkPassword("1234")
                 .name("김씨")
                 .department("정보통신과")
                 .gradle(3)
@@ -126,14 +126,11 @@ class UserControllerTest {
                 .sex("남성")
                 .build();
 
-        try {
-            userService.join(userJoin);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        userRepository.save(user);
+
         UserLogin login = UserLogin.builder()
                 .loginId("asd@mju.ac.kr")
-                .password("1234")
+                .password("5678")
                 .build();
 
         String json = objectMapper.writeValueAsString(login);
@@ -141,9 +138,45 @@ class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.accessToken", notNullValue()))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    @DisplayName("로그인 안되었을때 비밀번호 변경")
+    void test4() throws Exception {
+
+        User user= User.builder()
+                .loginId("asd@mju.ac.kr")
+                .password("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+                //               .roleStatus(RoleStatus.ROLE_USER)
+                .sex("남성")
+                .build();
+
+        userRepository.save(user);
+
+        PwdChange change = PwdChange.builder()
+                .loginId("asd@mju.ac.kr")
+                .newPassword("5678")
+                .checkPassword("5678")
+                .build();
+
+        String json = objectMapper.writeValueAsString(change);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/password_change")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+
+        User userTest = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
+        Assertions.assertEquals(user.getPassword(),"5678");
 
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.status.BoardStatus;
+import com.linked.matched.exception.post.PostNotFound;
 import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEditor;
@@ -133,13 +134,17 @@ class PostControllerTest {
                 .boardName(BoardStatus.valueOf("club"))
                 .build();
 
+        String json = objectMapper.writeValueAsString(requestEdit);
+
         mockMvc.perform(MockMvcRequestBuilders.patch("/board/{boardName}/{postId}", request.getBoardName(), request.getPostId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestEdit)))
+                        .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        Assertions.assertEquals(postRepository.findById(request.getPostId()).get().getTitle(), "제목입니다2.");
+        Post post = postRepository.findById(request.getPostId()).orElseThrow(PostNotFound::new);
+
+        Assertions.assertEquals(post.getTitle(), "제목입니다2.");
 
     }
 
@@ -196,4 +201,5 @@ class PostControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
     }
+
 }
