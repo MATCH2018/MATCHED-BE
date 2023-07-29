@@ -1,26 +1,25 @@
 package com.linked.matched.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
-import com.linked.matched.request.user.PwdChange;
-import com.linked.matched.request.user.UserJoin;
-import com.linked.matched.request.user.UserLogin;
+import com.linked.matched.request.user.*;
 import com.linked.matched.service.user.UserService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,6 +36,9 @@ class UserControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -44,8 +46,11 @@ class UserControllerTest {
 
     @AfterEach
     void clean() {
-        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
-        userRepository.deleteById(user.getUserId());
+        Optional<User> user = userRepository.findByLoginId("asd@mju.ac.kr");
+        if(user.isPresent()) {
+            User userDelete = user.get();
+            userRepository.delete(userDelete);
+        }
     }
 
     @Test
@@ -144,7 +149,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 안되었을때 비밀번호 변경")
+    @DisplayName("로그인 안 되었을 때 비밀번호 변경")
     void test4() throws Exception {
 
         User user= User.builder()
@@ -176,8 +181,31 @@ class UserControllerTest {
 
 
         User userTest = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
-        Assertions.assertEquals(user.getPassword(),"5678");
+        passwordEncoder.matches("5678",userTest.getPassword());
+    }
 
+    @Test
+    @DisplayName("회원 정보 수정")
+    @WithAuthUser
+    void test5()throws Exception{
+
+        UserEditor edit=UserEditor.builder()
+                .sex("남성")
+                .name("이름")
+                .department("통신")
+                .build();
+
+        String json = objectMapper.writeValueAsString(edit);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        User user = userRepository.findByLoginId("123").orElseThrow(() -> new UserNotFound());
+
+        Assertions.assertEquals(user.getName(),"이름");
     }
 
 }
