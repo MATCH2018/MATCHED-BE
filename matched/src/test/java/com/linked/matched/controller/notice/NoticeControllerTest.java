@@ -1,9 +1,11 @@
 package com.linked.matched.controller.notice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.repository.notice.NoticeRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEditor;
 import org.junit.jupiter.api.AfterEach;
@@ -35,9 +37,13 @@ class NoticeControllerTest {
     @Autowired
     private NoticeRepository noticeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @AfterEach
     void clean(){
         noticeRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 
@@ -176,6 +182,68 @@ class NoticeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("제목입니다."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].title").value("제목입니다3."))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].content").value("내용4"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    @DisplayName("ROLE_USER 권한으로 글 작성 못 한다.")
+    @WithAuthUser
+    void test6() throws Exception {
+
+        NoticeCreate notice = NoticeCreate.builder()
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        String json = objectMapper.writeValueAsString(notice);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/board/notice")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf().asHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("ROLE_USER 권한으로 글 수정 못한다.")
+    @WithAuthUser
+    void test7()throws Exception{
+        Notice notice = Notice.builder()
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        noticeRepository.save(notice);
+
+        NoticeEditor noticeEdit = NoticeEditor.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/board/notice/{noticeId}",notice.getNoticeId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(noticeEdit)))
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("ROLE_USER 권한으로 글 삭제 못한다.")
+    @WithAuthUser
+    void test8()throws Exception{
+        Notice notice = Notice.builder()
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        noticeRepository.save(notice);
+
+        Assertions.assertEquals(noticeRepository.count(),1);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/board/notice/{noticeId}", notice.getNoticeId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andDo(MockMvcResultHandlers.print());
     }
 }
