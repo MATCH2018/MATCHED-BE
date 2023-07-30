@@ -46,11 +46,7 @@ class UserControllerTest {
 
     @AfterEach
     void clean() {
-        Optional<User> user = userRepository.findByLoginId("asd@mju.ac.kr");
-        if(user.isPresent()) {
-            User userDelete = user.get();
-            userRepository.delete(userDelete);
-        }
+        userRepository.deleteAll();
     }
 
     @Test
@@ -203,7 +199,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        User user = userRepository.findByLoginId("123").orElseThrow(() -> new UserNotFound());
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
 
         Assertions.assertEquals(user.getName(),"이름");
     }

@@ -20,11 +20,19 @@ public class AuthUserSecurityContextFactory implements WithSecurityContextFactor
 
     @Override
     public SecurityContext createSecurityContext(WithAuthUser annotation) {
-        String name=annotation.loginId();
-        String password=annotation.password();
+        String name="asd@mju.ac.kr";
+        String password="1234";
         String role=annotation.authorityName();
 
-        User user = userRepository.findByLoginId(name).orElseThrow(() -> new UserNotFound());
+        User user = User.builder()
+                .loginId("asd@mju.ac.kr")
+                .password("1234")
+                .authorityName(role)
+                .build();
+
+
+        userRepository.save(user);
+
         UserPrincipal userPrincipal = new UserPrincipal(user);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userPrincipal,password , List.of(new SimpleGrantedAuthority(role)));

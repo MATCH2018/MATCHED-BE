@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Notice;
 import com.linked.matched.repository.notice.NoticeRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEditor;
 import org.junit.jupiter.api.AfterEach;
@@ -36,9 +37,13 @@ class NoticeControllerTest {
     @Autowired
     private NoticeRepository noticeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @AfterEach
     void clean(){
         noticeRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 

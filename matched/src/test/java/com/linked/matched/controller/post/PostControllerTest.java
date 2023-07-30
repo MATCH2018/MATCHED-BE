@@ -3,9 +3,12 @@ package com.linked.matched.controller.post;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linked.matched.annotation.WithAuthUser;
 import com.linked.matched.entity.Post;
+import com.linked.matched.entity.User;
 import com.linked.matched.entity.status.BoardStatus;
 import com.linked.matched.exception.post.PostNotFound;
+import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.post.PostRepository;
+import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEditor;
 import org.junit.jupiter.api.AfterEach;
@@ -35,10 +38,13 @@ class PostControllerTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
     @AfterEach
     void clean() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -114,15 +120,19 @@ class PostControllerTest {
         Assertions.assertEquals(next.getTitle(), "제목입니다.");
     }
 
-//    @Test
+    @Test
     @WithAuthUser
     @DisplayName("글 수정")
     void test3() throws Exception {
+
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
+
         Post request = Post.builder()
                 .title("제목입니다1.")
                 .content("내용입니다1.")
                 .limitPeople(3)
                 .boardName(BoardStatus.valueOf("club"))
+                .user(user)
                 .build();
 
         postRepository.save(request);
@@ -148,15 +158,19 @@ class PostControllerTest {
 
     }
 
-//    @Test
+    @Test
     @WithAuthUser
     @DisplayName("글 삭제")
     void test4() throws Exception {
+
+        User user = userRepository.findByLoginId("asd@mju.ac.kr").orElseThrow(() -> new UserNotFound());
+
         Post request = Post.builder()
                 .title("제목입니다1.")
                 .content("내용입니다1.")
                 .limitPeople(3)
                 .boardName(BoardStatus.valueOf("club"))
+                .user(user)
                 .build();
 
         postRepository.save(request);
