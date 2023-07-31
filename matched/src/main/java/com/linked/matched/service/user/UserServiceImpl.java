@@ -1,6 +1,6 @@
 package com.linked.matched.service.user;
 
-import com.linked.matched.config.jwt.TokenProvider;
+import com.linked.matched.jwt.TokenProvider;
 import com.linked.matched.entity.RefreshToken;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.email.AlreadyExistsEmailException;

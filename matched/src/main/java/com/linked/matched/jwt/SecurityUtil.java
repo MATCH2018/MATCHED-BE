@@ -1,4 +1,4 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import com.linked.matched.exception.user.NotSecurityContext;
 import org.springframework.security.core.Authentication;

@@ -1,8 +1,7 @@
 package com.linked.matched.annotation;
 
-import com.linked.matched.config.jwt.UserPrincipal;
+import com.linked.matched.jwt.UserPrincipal;
 import com.linked.matched.entity.User;
-import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

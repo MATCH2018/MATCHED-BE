@@ -1,15 +1,14 @@
 package com.linked.matched.config;
 
-import com.linked.matched.config.jwt.JwtAccessDeniedHandler;
-import com.linked.matched.config.jwt.JwtAuthenticationEntryPoint;
-import com.linked.matched.config.jwt.JwtSecurityConfig;
-import com.linked.matched.config.jwt.TokenProvider;
+import com.linked.matched.jwt.JwtAccessDeniedHandler;
+import com.linked.matched.jwt.JwtAuthenticationEntryPoint;
+import com.linked.matched.jwt.JwtSecurityConfig;
+import com.linked.matched.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

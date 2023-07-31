@@ -1,4 +1,4 @@
-package com.linked.matched.repository.user;
+package com.linked.matched.repository.blacklist;
 
 import com.linked.matched.entity.Blacklist;
 import org.springframework.data.jpa.repository.JpaRepository;

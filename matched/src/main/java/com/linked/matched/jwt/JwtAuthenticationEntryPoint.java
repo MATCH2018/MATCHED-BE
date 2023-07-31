@@ -1,4 +1,4 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

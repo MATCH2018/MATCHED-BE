@@ -1,4 +1,4 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import com.linked.matched.exception.user.AuthenticationFail;
 import com.linked.matched.response.jwt.TokenDto;

@@ -1,13 +1,13 @@
 package com.linked.matched.controller.user;
 
-import com.linked.matched.config.jwt.UserPrincipal;
+import com.linked.matched.jwt.UserPrincipal;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
 import com.linked.matched.request.user.*;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.response.user.UserProfile;
-import com.linked.matched.service.user.BlacklistService;
+import com.linked.matched.service.blacklist.BlackListService;
 import com.linked.matched.service.user.EmailService;
 import com.linked.matched.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final EmailService emailService;
-    private final BlacklistService blacklistService;
+    private final BlackListService blacklistService;
 
     @PostMapping("/login") //로그인
     public ResponseEntity<Object> userLogin(@RequestBody UserLogin userLogin) {//토큰 값 response -0

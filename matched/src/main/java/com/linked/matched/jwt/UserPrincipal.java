@@ -1,4 +1,4 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

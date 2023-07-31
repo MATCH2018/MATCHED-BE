@@ -1,4 +1,4 @@
-package com.linked.matched.service.user;
+package com.linked.matched.service.repository;
 
 import com.linked.matched.request.report.PostReportRequest;
 
