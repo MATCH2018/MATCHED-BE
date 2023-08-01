@@ -1,16 +1,12 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor

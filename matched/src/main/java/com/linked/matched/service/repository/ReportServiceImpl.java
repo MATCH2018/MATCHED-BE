@@ -1,4 +1,4 @@
-package com.linked.matched.service.user;
+package com.linked.matched.service.repository;
 
 import com.linked.matched.entity.Post;
 import com.linked.matched.entity.PostReport;
@@ -11,6 +11,7 @@ import com.linked.matched.repository.post.PostRepository;
 import com.linked.matched.repository.report.PostReportRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.report.PostReportRequest;
+import com.linked.matched.service.repository.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class ReportServiceImpl implements ReportService{
+public class ReportServiceImpl implements ReportService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;

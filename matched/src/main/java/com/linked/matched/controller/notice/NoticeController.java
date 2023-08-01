@@ -1,6 +1,6 @@
 package com.linked.matched.controller.notice;
 
-import com.linked.matched.config.jwt.UserPrincipal;
+import com.linked.matched.jwt.UserPrincipal;
 import com.linked.matched.request.notice.NoticeCreate;
 import com.linked.matched.request.notice.NoticeEditor;
 import com.linked.matched.response.ResponseDto;
@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

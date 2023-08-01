@@ -1,14 +1,11 @@
 package com.linked.matched.service.user;
 
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.jwt.DeleteTokenDto;
 import com.linked.matched.request.jwt.TokenRequestDto;
 import com.linked.matched.request.user.*;
 import com.linked.matched.response.jwt.TokenDto;
 import com.linked.matched.response.user.UserMail;
 import com.linked.matched.response.user.UserProfile;
-
-import java.security.Principal;
 
 public interface UserService {
     void join(UserJoin userJoin) throws Exception;

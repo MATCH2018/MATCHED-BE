@@ -2,7 +2,7 @@ package com.linked.matched.controller.report;
 
 import com.linked.matched.request.report.PostReportRequest;
 import com.linked.matched.response.ResponseDto;
-import com.linked.matched.service.user.ReportService;
+import com.linked.matched.service.repository.ReportService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

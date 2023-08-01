@@ -1,4 +1,4 @@
-package com.linked.matched.config.jwt;
+package com.linked.matched.jwt;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

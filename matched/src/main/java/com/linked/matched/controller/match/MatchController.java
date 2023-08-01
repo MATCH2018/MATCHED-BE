@@ -1,6 +1,6 @@
 package com.linked.matched.controller.match;
 
-import com.linked.matched.config.jwt.UserPrincipal;
+import com.linked.matched.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.response.ResponseDto;
 import com.linked.matched.response.post.PostOneResponse;
@@ -14,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

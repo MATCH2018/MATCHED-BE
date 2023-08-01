@@ -1,6 +1,6 @@
 package com.linked.matched.controller.post;
 
-import com.linked.matched.config.jwt.UserPrincipal;
+import com.linked.matched.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
@@ -15,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
-import java.security.Principal;
 import java.util.List;
 
 @RestController

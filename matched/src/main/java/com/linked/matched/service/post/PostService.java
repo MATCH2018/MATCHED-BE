@@ -1,6 +1,5 @@
 package com.linked.matched.service.post;
 
-import com.linked.matched.config.jwt.UserPrincipal;
 import com.linked.matched.request.post.PostCreate;
 import com.linked.matched.request.post.PostEditor;
 import com.linked.matched.request.post.PostSearch;
