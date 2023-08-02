@@ -5,6 +5,7 @@ import com.linked.matched.entity.Post;
 import com.linked.matched.entity.User;
 import com.linked.matched.exception.post.NotApplicant;
 import com.linked.matched.exception.post.PostNotFound;
+import com.linked.matched.exception.post.SelfApplicant;
 import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.match.ApplicantRepository;
 import com.linked.matched.repository.post.PostRepository;
@@ -33,8 +34,10 @@ public class ApplicantServiceImpl implements ApplicantService{
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
-        if(applicantRepository.findByUserAndPost(user,post).isPresent()){
+        if(applicantRepository.findByUserAndPost(user,post).isPresent()) {
             return false;
+        }else if(post.getUser().equals(user)){
+            throw new SelfApplicant();
         }
 
         Applicant applicant = Applicant.builder()

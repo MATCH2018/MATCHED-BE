@@ -11,6 +11,6 @@ public class AlreadyApplicant extends MatchException {
 
     @Override
     public int getStatusCode() {
-        return 0;
+        return 409;
     }
 }
