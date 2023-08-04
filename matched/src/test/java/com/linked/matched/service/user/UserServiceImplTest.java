@@ -7,7 +7,7 @@ import com.linked.matched.exception.user.UserNotFound;
 import com.linked.matched.repository.jwt.RefreshTokenRepository;
 import com.linked.matched.repository.user.UserRepository;
 import com.linked.matched.request.jwt.DeleteTokenDto;
-import com.linked.matched.request.user.PwdEdit;
+import com.linked.matched.request.user.PwdCheck;
 import com.linked.matched.request.user.UserEditor;
 import com.linked.matched.request.user.UserJoin;
 import com.linked.matched.request.user.UserLogin;
@@ -266,7 +266,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("비밀번호 변경")
+    @DisplayName("본인체크")
     void test10(){
 
         User userJoin= User.builder()
@@ -285,17 +285,16 @@ class UserServiceImplTest {
 
         User next = userRepository.findByLoginId(userJoin.getLoginId()).orElseThrow(()->new UserNotFound());
 
-        PwdEdit newPassword = PwdEdit.builder()
+        PwdCheck newPassword = PwdCheck.builder()
                 .nowPassword("1234")
-                .newPassword("5678")
-                .checkPassword("5678")
+                .checkPassword("1234")
                 .build();
 
-        userService.passwordEdit(next.getUserId(), newPassword);
+        userService.passwordCheck(next.getUserId(), newPassword);
 
         UserLogin login = UserLogin.builder()
                 .loginId("asd@mju.ac.kr")
-                .password("5678")
+                .password("1234")
                 .build();
 
         TokenDto user = userService.login(login);

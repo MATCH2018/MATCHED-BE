@@ -144,15 +144,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    @Transactional
-    public void passwordEdit(Long id, PwdEdit pwdEdit) {
-        User user = userRepository.findById(Long.valueOf(id)).orElseThrow(UserNotFound::new);
-
-        if (!passwordEncoder.matches(pwdEdit.getNowPassword(), user.getPassword())||!pwdEdit.getNewPassword().equals(pwdEdit.getCheckPassword())) {
+    public boolean passwordCheck(Long id, PwdCheck pwdEdit) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFound::new);
+        if (!passwordEncoder.matches(pwdEdit.getNowPassword(),user.getPassword())||!pwdEdit.getNowPassword().equals(pwdEdit.getCheckPassword())) {
             throw new NotEqualPassword();
         }
-        String encode = passwordEncoder.encode(pwdEdit.getNewPassword());
-        user.passwordEdit(encode);
+        return true;
     }
 
     @Override
