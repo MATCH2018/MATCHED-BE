@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PwdEdit {
+public class PwdCheck {
 
     private String nowPassword;
-    private String newPassword;
     private String checkPassword;
 
     @Builder
-    public PwdEdit(String nowPassword, String newPassword, String checkPassword) {
+    public PwdCheck(String nowPassword, String checkPassword) {
         this.nowPassword = nowPassword;
-        this.newPassword = newPassword;
         this.checkPassword = checkPassword;
     }
 }

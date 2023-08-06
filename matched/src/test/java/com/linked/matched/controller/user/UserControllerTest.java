@@ -19,8 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -145,8 +143,33 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 안 되었을 때 비밀번호 변경")
+    @DisplayName("@mju.ac.kr 메일 아니면 회원 가입 안됨")
     void test4() throws Exception {
+        UserJoin userJoin= UserJoin.builder()
+                .loginId("asd@naver.com")
+                .password("1234")
+                .checkPassword("1234")
+                .name("김씨")
+                .department("정보통신과")
+                .gradle(3)
+//                .birth("1999-01-01") //나중에 형변환 해야하는데 지금 ㄴ 중요
+                .sex("남성")
+                .build();
+
+        String json = objectMapper.writeValueAsString(userJoin);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/join")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+
+        Assertions.assertEquals(userRepository.count(),0);
+    }
+
+    @Test
+    @DisplayName("로그인 안 되었을 때 비밀번호 변경")
+    void test5() throws Exception {
 
         User user= User.builder()
                 .loginId("asd@mju.ac.kr")
@@ -183,7 +206,7 @@ class UserControllerTest {
     @Test
     @DisplayName("회원 정보 수정")
     @WithAuthUser
-    void test5()throws Exception{
+    void test6()throws Exception{
 
         UserEditor edit=UserEditor.builder()
                 .sex("남성")
@@ -203,5 +226,30 @@ class UserControllerTest {
 
         Assertions.assertEquals(user.getName(),"이름");
     }
+
+
+
+    @Test
+    @DisplayName("회원 탈퇴")
+    @WithAuthUser
+    void test7()throws Exception{
+
+        UserEditor edit=UserEditor.builder()
+                .sex("남성")
+                .name("이름")
+                .department("통신")
+                .build();
+
+        String json = objectMapper.writeValueAsString(edit);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        Assertions.assertEquals(userRepository.count(),0);
+    }
+
 
 }

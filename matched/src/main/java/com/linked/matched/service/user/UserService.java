@@ -14,14 +14,13 @@ public interface UserService {
 
     TokenDto reissue(TokenRequestDto tokenRequestDto);
 
-
     void refreshTokenDelete(DeleteTokenDto deleteTokenDto);
 
     void deleteUser(Long id);
 
     void edit(Long id, UserEditor userEdit);
 
-    void passwordEdit(Long id, PwdEdit pwdEdit);
+    boolean passwordCheck(Long id, PwdCheck pwdEdit);
 
     void passwordChange(PwdChange pwdChange);
 

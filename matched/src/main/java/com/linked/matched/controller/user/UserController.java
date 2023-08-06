@@ -64,11 +64,12 @@ public class UserController {
 
     }
 
-    @PostMapping("/password_edit")//로그인 되었을때 비밀번호 변경
-    public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdEdit pwdEdit, @AuthenticationPrincipal UserPrincipal userPrincipal) {//비밀번호가 변경되었습니다.
-        userService.passwordEdit(userPrincipal.getUserId(),pwdEdit);
-        return new ResponseEntity<>(new ResponseDto("비밀번호가 변경 되었습니다."), HttpStatus.OK);
-
+    @GetMapping("/password_check")//비밀번호 변경전 본인 체크
+    public ResponseEntity<Object> userPasswordEdit(@RequestBody PwdCheck pwdEdit, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        if(userService.passwordCheck(userPrincipal.getUserId(), pwdEdit)) {
+            return new ResponseEntity<>(new ResponseDto("비밀번호가 맞습니다."), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDto("비밀번호가 다릅니다."), HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/password_change")//로그인 안되었을때 비밀번호 변경
