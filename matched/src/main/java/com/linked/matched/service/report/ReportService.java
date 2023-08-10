@@ -1,4 +1,4 @@
-package com.linked.matched.service.repository;
+package com.linked.matched.service.report;
 
 import com.linked.matched.request.report.PostReportRequest;
 
