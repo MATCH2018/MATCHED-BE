@@ -91,6 +91,7 @@ public class SecurityConfig {
                 .antMatchers("/join").permitAll()
                 .antMatchers("/email").permitAll()
                 .antMatchers("/reissue").permitAll()
+                .antMatchers("/password_check").permitAll()
                 .antMatchers("/password_change").permitAll()
                 .anyRequest().authenticated()//나머지 request는 인증이 필요하다고 설정하는것
 
